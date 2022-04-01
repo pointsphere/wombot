@@ -51,7 +51,7 @@ shoutstart = [
 
 shoutend = ["😘", "❤️", "💙"]
 
-
+gifhosts = ["https://c.tenor.com/","https://media.giphy.com/"]
 
 basepath = Path().absolute()
 bbb_file = os.path.join(basepath, "bbb.txt")
@@ -311,11 +311,10 @@ class WomBot(ch.RoomManager):
 
 
             else:
-                pass
-                '''
+                # very crude way to catch posted gifs and add them to allgif_set and allgif_file
                 splitmsg = message.body.split(" ")
                 for word in splitmsg:
-                    if (word.startswith("http") and word.endswith(".gif")):
+                    if (any(word.startswith(host) for host in gifhosts) and word.endswith(".gif") and (len(word)<75)):
                         print("might be gif")
                         if word in allgif_set:
                             pass
@@ -325,7 +324,7 @@ class WomBot(ch.RoomManager):
                             allgif_set.add(word)
                             with open(allgif_file,'a') as file:
                                 file.write(word + "\n")
-                                '''
+                                
 
 
 
