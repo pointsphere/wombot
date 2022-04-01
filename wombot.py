@@ -134,6 +134,7 @@ class WomBot(ch.RoomManager):
 
                 ##Eval
                 ##You may want/need to evaluate something about your bot.
+                '''
                 if cmd == "ev" or cmd == "eval" or cmd == "e":
                     room.delete(message)
                     ret = eval(args)
@@ -141,8 +142,9 @@ class WomBot(ch.RoomManager):
                         room.message("Done.")
                         return
                     room.message(str(ret))
+                    '''
                     
-                elif cmd == "help":
+                if cmd == "help":
                     print(helpmessage)
                     room.delete(message)
                     self.pm.message(user,helpmessage)
@@ -200,16 +202,16 @@ class WomBot(ch.RoomManager):
 
                 elif cmd == "b2b":
                     room.delete(message)
-                    gifone = random.choice(tuple(allgif_set))
-                    giftwo = random.choice(tuple(allgif_set))
+                    gifone = random.choice(tuple(bbb_set))
+                    giftwo = random.choice(tuple(bbb_set))
 
                     room.message(gifone + " " + giftwo + " " + gifone)
 
                 elif cmd in ["b2b2b","bbbb"]:
                     room.delete(message)
-                    gifone = random.choice(tuple(allgif_set))
-                    giftwo = random.choice(tuple(allgif_set))
-                    gifthree = random.choice(tuple(allgif_set))
+                    gifone = random.choice(tuple(bbb_set))
+                    giftwo = random.choice(tuple(bbb_set))
+                    gifthree = random.choice(tuple(bbb_set))
 
                     room.message(gifone + " " + giftwo + " " + gifthree)
 
