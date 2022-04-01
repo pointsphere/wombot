@@ -32,14 +32,20 @@ chatango_pass = secrets.chatango_pass
 tenor_key = secrets.tenor_key
 
 myrooms = []
-myrooms.append(environ['wombotroom'])
+myrooms.append(environ['wombotmainroom'])
+myrooms.append(environ['wombottestroom'])
 
 commandlist = ["help","fortune","id1","id2",
                 "iddy","ev","eval","e","bbb", 
                 "gif", "gift", "bigb","b2b2b"
                 "say","kiss","shoutout","chunt","mods","tag","g"]
 
-helpmessage = "your friendly spambot \r here to spam gifs and give trackids \r\r commands: \r \r!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r GIFs: \r!gif or !gift for random dance gif \r!bigb for gifs from bigbunnybrer's collection \r!b2b back2back of bigbunnybrer gifs \r \r also: !bbbb !fortune (!tag url tagname) and simply '!'+tag (like !dance) \r \r gifs stolen from oscmal, bigbunnybrer and every poster in this channel \r\r contact: kinematics@gmx.net \r chunt on"
+helpmessage = "your friendly spambot \r here to spam gifs and give trackids \r\r" + \
+                "commands: \r \r!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r " + \
+                "GIFs: \r!gif for random dance gif \r!gift or !bigb for gifs from bigbunnybrer's collection \r" + \
+                "!b2b back2back of bigbunnybrer gifs \r \r " + \
+                "also: !bbbb !fortune !tags  \r \r " + \
+                "gifs stolen from oscmal, bigbunnybrer and every poster in this channel \r\r keep chunting"
 
 shoutstart = [
     "out to you, ",
@@ -155,6 +161,20 @@ class WomBot(ch.RoomManager):
                     room.delete(message)
                     room.message("your fortune, " + user.name + " : " + (random.choice(fortunes.fortunecookie)).replace(".","").lower())
 
+                elif cmd == "tags":
+                    room.delete(message)
+                    dict_keys = d.keys()
+                    taglist = []
+                    for key in dict_keys:
+                        #print(key)
+                        taglist.append(key)
+                    thelongeststring = 'to tag a gif: !tag link-to-the-gif tagname \r'
+                    for key in taglist:
+                        thelongeststring +=  "!" + key + " "
+                    print(thelongeststring)
+                        
+                    self.pm.message(user,str(thelongeststring))
+
                 elif cmd == "id1":
                     room.delete(message)
                     trackid_unstripped = get_id_nts.run("1")
@@ -192,12 +212,12 @@ class WomBot(ch.RoomManager):
                     #room.message( doyou_id_str)
                     room.message("ID DoYou " + doyou_id_str)
 
-                elif cmd in ["bbb", "bigb"]:
+                elif cmd in ["bbb", "bigb","gift"]:
                     room.delete(message)
                     gifone = random.choice(tuple(bbb_set))
                     room.message(gifone + " " + gifone + " " + gifone)
 
-                elif cmd in ["gif", "gift"]:
+                elif cmd in ["gif"]:
                     room.delete(message)
                     gifone = random.choice(d["dance"])
                     room.message(gifone + " " + gifone + " " + gifone)
