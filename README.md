@@ -27,3 +27,9 @@ chatango_user = ""
 chatango_pass = ""
 google_key = ""
 google_cx = ""
+
+export environment variables in your shell for easier deployment
+    export wombotmainroom="mainroom"
+    export wombottestroom="testroom"
+
+and maybe include them in your ~/.bashrc ( or or ~/.zshrc for ZSH) or or ~/.profile

@@ -15,6 +15,8 @@ import search_google
 import secrets
 import fortunes
 import json
+from os import environ
+# environ['VAR_NAME']
 
 
 if sys.version_info[0] > 2:
@@ -29,8 +31,8 @@ chatango_user = secrets.chatango_user
 chatango_pass = secrets.chatango_pass
 tenor_key = secrets.tenor_key
 
-
-myrooms = ["knmx", "bothome"]
+myrooms = []
+myrooms.append(environ['wombotroom'])
 
 commandlist = ["help","fortune","id1","id2",
                 "iddy","ev","eval","e","bbb", 
