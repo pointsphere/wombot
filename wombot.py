@@ -43,6 +43,8 @@ commandlist = ["help","fortune","id1","id2",
 helpmessage = "your friendly spambot \r here to spam gifs and give trackids \r\r" + \
                 "commands: \r \r!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r " + \
                 "GIFs: \r!gif for random dance gif \r!gift or !bigb for gifs from bigbunnybrer's collection \r" + \
+                "!shoutout @username  \r " + \
+                "!kiss @username \r" + \
                 "!b2b back2back of bigbunnybrer gifs \r \r " + \
                 "also: !bbbb !fortune !tags  \r \r " + \
                 "gifs stolen from oscmal, bigbunnybrer and every poster in this channel \r\r keep chunting"
