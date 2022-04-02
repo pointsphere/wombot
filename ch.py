@@ -394,12 +394,14 @@ class PM:
         while self._rbuf.find(b"\x00") != -1:
             data = self._rbuf.split(b"\x00")
             for food in data[:-1]:
-                if ((sys.version_info[0] < 3 or sys.platform.startswith("win"))
+                if (
+                    sys.version_info[0] < 3
+                    or sys.platform.startswith("win")
                     and not "idlelib" in sys.modules
                 ):
                     self._process(
                         food.decode(errors="replace").rstrip("\r\n")
-                    )
+                    )  
                 else:
                     self._process(food.decode().rstrip("\r\n"))
             self._rbuf = data[-1]
@@ -1180,6 +1182,12 @@ class Room:
         """
         print("ch: sending delmsg")
         print("userlevel: ", self.getLevel(self.user))
+
+
+        # ugly hack: trying to delete without checking if possible because getLevel always returns 0
+        # make sure you're a mod!!!
+
+
         # if self.getLevel(self.user) > 0:
         self._sendCommand("delmsg", message.msgid)
 

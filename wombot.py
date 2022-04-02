@@ -104,7 +104,7 @@ print(d)
 class WomBot(ch.RoomManager):
     def onInit(self):
         self.setNameColor("255")
-        self.setFontColor("F33")
+        self.setFontColor("0C96E4")
         self.setFontFace("0")
         self.setFontSize(10)
         self.enableBg()
