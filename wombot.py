@@ -165,7 +165,8 @@ class WomBot(ch.RoomManager):
                     room.delete(message)
                     room.message("your fortune, " + user.name + " : " + (random.choice(fortunes.fortunecookie)).replace(".","").lower())
                 elif cmd == "wombat":
-
+                    room.delete(message)
+                    room.message(random.choice(data_pics_wombat))
 
                 elif cmd == "tags":
                     room.delete(message)
