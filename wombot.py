@@ -17,6 +17,7 @@ import secrets
 import data_pics_wombat
 import data_pics_capybara
 import data_pics_otter
+import data_pics_quokka
 import data_txt_fortunes as fortunes
 import json
 from os import environ
@@ -42,7 +43,7 @@ myrooms.append(environ['wombottestroom'])
 commandlist = ["help","fortune","id1","id2",
                 "iddy","ev","eval","e","bbb", 
                 "gif", "gift", "bigb","b2b2b"
-                "say","kiss","shoutout","chunt","mods","tag","g","wombat","capybara","otter"]
+                "say","kiss","shoutout","chunt","mods","tag","g","wombat","capybara","otter","quokka"]
 
 helpmessage = "your friendly spambot \r here to spam gifs and give trackids \r\r" + \
                 "commands: \r \r!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r " + \
@@ -177,6 +178,10 @@ class WomBot(ch.RoomManager):
                 elif cmd == "otter":
                     room.delete(message)
                     room.message(random.choice(data_pics_otter.pics))
+
+                elif cmd == "quokka":
+                    room.delete(message)
+                    room.message(random.choice(data_pics_quokka.pics))
 
                 elif cmd == "tags":
                     room.delete(message)
