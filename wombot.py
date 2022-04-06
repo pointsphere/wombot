@@ -143,10 +143,10 @@ class WomBot(ch.RoomManager):
             if message.body[0] == "!":  ##Here is the Prefix part
                 data = message.body[1:].split(" ", 1)
                 if len(data) > 1:
-                    cmd, args = data[0], data[1]
+                    orig_cmd, args = data[0], data[1]
                 else:
-                    cmd, args = data[0], ""
-
+                    orig_cmd, args = data[0], ""
+                cmd = orig_cmd.lower()
                 ##COMMANDS!
                 # Setting up commands for your bot
 
