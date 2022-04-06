@@ -19,7 +19,10 @@ import data_pics_capybara
 import data_pics_otter
 import data_pics_quokka
 import data_txt_fortunes as fortunes
+import data_gif_hardcoded
 import json
+
+
 from os import environ
 # environ['VAR_NAME']
 
@@ -182,6 +185,10 @@ class WomBot(ch.RoomManager):
                 elif cmd == "quokka":
                     room.delete(message)
                     room.message(random.choice(data_pics_quokka.pics))
+
+                elif cmd == "fesh":
+                    room.delete(message)
+                    room.message(data_gif_hardcoded.fesh)
 
                 elif cmd == "tags":
                     room.delete(message)
@@ -387,6 +394,8 @@ class WomBot(ch.RoomManager):
         print("received Floodwarning!")
         time.sleep(5)
         room.reconnect()
+
+    # apparently pm. is the wrong object, triggers 2 times but crashes 2nd time because it's "None". where is right pm.? 
     '''
     def onPMMessage(self, pm, user, body):
         print("PM recvd")
