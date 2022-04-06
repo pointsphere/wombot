@@ -1,4 +1,4 @@
-wombat_pics = [
+pics = [
     "https://i.imgur.com/Y8iytvR.png",
     "https://i.imgur.com/OOxZlqS.png",
     "https://i.imgur.com/nR5h3wa.png",
