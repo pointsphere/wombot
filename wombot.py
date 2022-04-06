@@ -12,8 +12,10 @@ from collections import defaultdict
 import validators
 import search_google
 #from gif_sort import dance
+
 import secrets
-import fortunes
+import data_pics_wombat
+import data_txt_fortunes as fortunes
 import json
 from os import environ
 # environ['VAR_NAME']
@@ -38,7 +40,7 @@ myrooms.append(environ['wombottestroom'])
 commandlist = ["help","fortune","id1","id2",
                 "iddy","ev","eval","e","bbb", 
                 "gif", "gift", "bigb","b2b2b"
-                "say","kiss","shoutout","chunt","mods","tag","g"]
+                "say","kiss","shoutout","chunt","mods","tag","g","wombat"]
 
 helpmessage = "your friendly spambot \r here to spam gifs and give trackids \r\r" + \
                 "commands: \r \r!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r " + \
@@ -57,7 +59,7 @@ shoutstart = [
     "out to the unimitable",
     ]
 
-shoutend = ["😘", "❤️", "💙"]
+shoutend = ["😘", "❤️", "💙","*h*"]
 
 gifhosts = ["https://c.tenor.com/","https://media.giphy.com/"]
 
@@ -162,6 +164,8 @@ class WomBot(ch.RoomManager):
                 elif cmd == "fortune":
                     room.delete(message)
                     room.message("your fortune, " + user.name + " : " + (random.choice(fortunes.fortunecookie)).replace(".","").lower())
+                elif cmd == "wombat":
+
 
                 elif cmd == "tags":
                     room.delete(message)

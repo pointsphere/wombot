@@ -33,3 +33,9 @@ export environment variables in your shell for easier deployment
     export wombottestroom="testroom"
 
 and maybe include them in your ~/.bashrc ( or or ~/.zshrc for ZSH) or or ~/.profile
+
+
+optional if trying to scrape something behind login:
+install chromedriver if required
+on debian:
+    apt install chromium-driver
