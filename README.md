@@ -29,6 +29,7 @@ google_key = ""
 google_cx = ""
 
 export environment variables in your shell for easier deployment
+
     export wombotmainroom="mainroom"
     export wombottestroom="testroom"
 
