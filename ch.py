@@ -1420,6 +1420,7 @@ class RoomManager:
         self._name = name
         self._password = password
         self._running = False
+        self._sleepmode = False
         self._tasks = set()
         self._rooms = dict()
         if pm:

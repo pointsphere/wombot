@@ -43,6 +43,7 @@ myrooms = []
 myrooms.append(environ['wombotmainroom'])
 myrooms.append(environ['wombottestroom'])
 
+
 commandlist = ["help","fortune","id1","id2",
                 "iddy","ev","eval","e","bbb", 
                 "gif", "gift", "bigb","b2b2b"
@@ -132,9 +133,9 @@ class WomBot(ch.RoomManager):
     def onMessage(self, room, user, message):
         try:
             if room.getLevel(self.user) > 0:
-                print(user.name, message.body)
+                print(user.name, message.body,room.getLevel(user))
             else:
-                print(user.name, message.body)
+                print(user.name, message.body,room.getLevel(user))
             if self.user == user:
                 return
 
@@ -160,211 +161,223 @@ class WomBot(ch.RoomManager):
                         return
                     room.message(str(ret))
                     '''
+                if self._sleepmode == True:
+                    if cmd == ("start"):
+                        room.delete(message)
+                        if room.getLevel(user) > 0:
+                            self._sleepmode = False
+                else:
+
+                    if cmd == ("stop" or "sleep"):
+                        room.delete(message)
+                        if room.getLevel(user) > 0:
+                            self._sleepmode = True
                     
-                if cmd == "help":
-                    print(helpmessage)
-                    room.delete(message)
-                    self.pm.message(user,helpmessage)
-
-                elif cmd == "fortune":
-                    room.delete(message)
-                    room.message("your fortune, " + user.name + " : " + (random.choice(fortunes.fortunecookie)).replace(".","").lower())
-                elif cmd == "wombat":
-                    room.delete(message)
-                    room.message(random.choice(data_pics_wombat.pics))
-
-                elif cmd == "capybara":
-                    room.delete(message)
-                    room.message(random.choice(data_pics_capybara.pics))
-
-                elif cmd == "otter":
-                    room.delete(message)
-                    room.message(random.choice(data_pics_otter.pics))
-
-                elif cmd == "quokka":
-                    room.delete(message)
-                    room.message(random.choice(data_pics_quokka.pics))
-
-                elif cmd == "fesh":
-                    room.delete(message)
-                    room.message(data_gif_hardcoded.fesh)
-
-                elif cmd == "tags":
-                    room.delete(message)
-                    dict_keys = d.keys()
-                    taglist = []
-                    for key in dict_keys:
-                        #print(key)
-                        taglist.append(key)
-                    thelongeststring = 'to tag a gif: !tag link-to-the-gif tagname \r'
-                    for key in taglist:
-                        thelongeststring +=  "!" + key + " "
-                    print(thelongeststring)
                         
-                    self.pm.message(user,str(thelongeststring))
+                    elif cmd == "help":
+                        print(helpmessage)
+                        room.delete(message)
+                        self.pm.message(user,helpmessage)
 
-                elif cmd == "id1":
-                    room.delete(message)
-                    trackid_unstripped = get_id_nts.run("1")
-                    trackid_split = trackid_unstripped.split("\n")
-                    stripped = trackid_unstripped.replace("\n", " - ").replace(
-                        "\r", " - "
-                    )
-                    googlequery = trackid_split[1] + " " + trackid_split[2]
-                    res = search_google.search(googlequery)
-                    if res is not None:
-                        bc_link = res[0]["link"]
-                        room.message("ID1: " + stripped + " | maybe it's: " + bc_link)
-                    else:
-                        room.message("ID1: " + stripped + " | no bandcamp found. ")
+                    elif cmd == "fortune":
+                        room.delete(message)
+                        room.message("your fortune, " + user.name + " : " + (random.choice(fortunes.fortunecookie)).replace(".","").lower())
+                    elif cmd == "wombat":
+                        room.delete(message)
+                        room.message(random.choice(data_pics_wombat.pics))
 
-                elif cmd == "id2":
-                    room.delete(message)
-                    trackid_unstripped = get_id_nts.run("2")
-                    trackid_split = trackid_unstripped.split("\n")
-                    stripped = trackid_unstripped.replace("\n", " - ").replace(
-                        "\r", " - "
-                    )
-                    googlequery = trackid_split[1] + " " + trackid_split[2]
-                    res = search_google.search(googlequery)
-                    if res is not None:
-                        bc_link = res[0]["link"]
-                        room.message("ID2: " + stripped + " | maybe it's: " + bc_link)
-                    else:
-                        room.message("ID2: " + stripped + " | no bandcamp found. ")
+                    elif cmd == "capybara":
+                        room.delete(message)
+                        room.message(random.choice(data_pics_capybara.pics))
 
-                elif cmd == "iddy":
-                    room.delete(message)
-                    doyou_id_str = get_id_doyou.get()
-                    #print(doyou_id_str)
-                    #room.message( doyou_id_str)
-                    room.message("ID DoYou " + doyou_id_str)
+                    elif cmd == "otter":
+                        room.delete(message)
+                        room.message(random.choice(data_pics_otter.pics))
 
-                elif cmd in ["bbb", "bigb","gift"]:
-                    room.delete(message)
-                    gifone = random.choice(tuple(bbb_set))
-                    room.message(gifone + " " + gifone + " " + gifone)
+                    elif cmd == "quokka":
+                        room.delete(message)
+                        room.message(random.choice(data_pics_quokka.pics))
 
-                elif cmd in ["gif"]:
-                    room.delete(message)
-                    gifone = random.choice(d["dance"])
-                    room.message(gifone)
+                    elif cmd == "fesh":
+                        room.delete(message)
+                        room.message(data_gif_hardcoded.fesh)
 
-                elif cmd == "b2b":
-                    room.delete(message)
-                    gifone = random.choice(tuple(bbb_set))
-                    giftwo = random.choice(tuple(bbb_set))
+                    elif cmd == "tags":
+                        room.delete(message)
+                        dict_keys = d.keys()
+                        taglist = []
+                        for key in dict_keys:
+                            #print(key)
+                            taglist.append(key)
+                        thelongeststring = 'to tag a gif: !tag link-to-the-gif tagname \r'
+                        for key in taglist:
+                            thelongeststring +=  "!" + key + " "
+                        print(thelongeststring)
+                            
+                        self.pm.message(user,str(thelongeststring))
 
-                    room.message(gifone + " " + giftwo + " " + gifone)
+                    elif cmd == "id1":
+                        room.delete(message)
+                        trackid_unstripped = get_id_nts.run("1")
+                        trackid_split = trackid_unstripped.split("\n")
+                        stripped = trackid_unstripped.replace("\n", " - ").replace(
+                            "\r", " - "
+                        )
+                        googlequery = trackid_split[1] + " " + trackid_split[2]
+                        res = search_google.search(googlequery)
+                        if res is not None:
+                            bc_link = res[0]["link"]
+                            room.message("ID1: " + stripped + " | maybe it's: " + bc_link)
+                        else:
+                            room.message("ID1: " + stripped + " | no bandcamp found. ")
 
-                elif cmd in ["b2b2b","bbbb"]:
-                    room.delete(message)
-                    gifone = random.choice(tuple(bbb_set))
-                    giftwo = random.choice(tuple(bbb_set))
-                    gifthree = random.choice(tuple(bbb_set))
+                    elif cmd == "id2":
+                        room.delete(message)
+                        trackid_unstripped = get_id_nts.run("2")
+                        trackid_split = trackid_unstripped.split("\n")
+                        stripped = trackid_unstripped.replace("\n", " - ").replace(
+                            "\r", " - "
+                        )
+                        googlequery = trackid_split[1] + " " + trackid_split[2]
+                        res = search_google.search(googlequery)
+                        if res is not None:
+                            bc_link = res[0]["link"]
+                            room.message("ID2: " + stripped + " | maybe it's: " + bc_link)
+                        else:
+                            room.message("ID2: " + stripped + " | no bandcamp found. ")
 
-                    room.message(gifone + " " + giftwo + " " + gifthree)
+                    elif cmd == "iddy":
+                        room.delete(message)
+                        doyou_id_str = get_id_doyou.get()
+                        #print(doyou_id_str)
+                        #room.message( doyou_id_str)
+                        room.message("ID DoYou " + doyou_id_str)
 
-                ##Say
-                # Make your bot say what you want
-                elif cmd == "say":
-                    room.delete(message)
-                    room.message(args)
+                    elif cmd in ["bbb", "bigb","gift"]:
+                        room.delete(message)
+                        gifone = random.choice(tuple(bbb_set))
+                        room.message(gifone + " " + gifone + " " + gifone)
 
-                elif cmd == "kiss":
-                    room.delete(message)
-                    if args:
-                        print(args)
-                        print(".......")
-                        splitargs = args.split(" ")
-                        for arg in splitargs:
-                            if arg.startswith("@"):
-                                print(arg)
-                                room.message("😘 " + (arg))
-                    else:
-                        room.message("😘 " + ("@" + user.name))
+                    elif cmd in ["gif"]:
+                        room.delete(message)
+                        gifone = random.choice(d["dance"])
+                        room.message(gifone)
 
-                elif cmd == "chunt":
-                    room.delete(message)
-                    room.message("I'm chuntin")
+                    elif cmd == "b2b":
+                        room.delete(message)
+                        gifone = random.choice(tuple(bbb_set))
+                        giftwo = random.choice(tuple(bbb_set))
 
-                ##List Mods
-                # List of Mods and Owner name in the current room you're in
-                elif cmd == "mods":
-                    room.delete(message)
-                    room.message(", ".join(room.modnames + [room.ownername]))
+                        room.message(gifone + " " + giftwo + " " + gifone)
 
-                
-                elif cmd == "shoutout":
-                    room.delete(message)
-                    if args:
-                        # print(args)
-                        # print('.......')
-                        splitargs = args.split(" ")
-                        if args.startswith("@"):
+                    elif cmd in ["b2b2b","bbbb"]:
+                        room.delete(message)
+                        gifone = random.choice(tuple(bbb_set))
+                        giftwo = random.choice(tuple(bbb_set))
+                        gifthree = random.choice(tuple(bbb_set))
+
+                        room.message(gifone + " " + giftwo + " " + gifthree)
+
+                    ##Say
+                    # Make your bot say what you want
+                    elif cmd == "say":
+                        room.delete(message)
+                        room.message(args)
+
+                    elif cmd == "kiss":
+                        room.delete(message)
+                        if args:
+                            print(args)
+                            print(".......")
+                            splitargs = args.split(" ")
                             for arg in splitargs:
-                                print('arg ',arg)
-                                if arg.startswith('@'):
-                                    room.message(
-                                        random.choice(shoutstart)
-                                        + " "
-                                        + (arg)
-                                        + " ! "
-                                        + random.choice(shoutend)
-                            )
+                                if arg.startswith("@"):
+                                    print(arg)
+                                    room.message("😘 " + (arg))
+                        else:
+                            room.message("😘 " + ("@" + user.name))
+
+                    elif cmd == "chunt":
+                        room.delete(message)
+                        room.message("I'm chuntin")
+
+                    ##List Mods
+                    # List of Mods and Owner name in the current room you're in
+                    elif cmd == "mods":
+                        room.delete(message)
+                        room.message(", ".join(room.modnames + [room.ownername]))
+
+                    
+                    elif cmd == "shoutout":
+                        room.delete(message)
+                        if args:
+                            # print(args)
+                            # print('.......')
+                            splitargs = args.split(" ")
+                            if args.startswith("@"):
+                                for arg in splitargs:
+                                    print('arg ',arg)
+                                    if arg.startswith('@'):
+                                        room.message(
+                                            random.choice(shoutstart)
+                                            + " "
+                                            + (arg)
+                                            + " ! "
+                                            + random.choice(shoutend)
+                                )
+
+                            else:
+                                room.message(
+                                    random.choice(shoutstart)
+                                    + " "
+                                    + (args)
+                                    + " ! "
+                                    + random.choice(shoutend)
+                                )
 
                         else:
                             room.message(
                                 random.choice(shoutstart)
                                 + " "
-                                + (args)
-                                + " ! "
+                                + random.choice(room.usernames)
+                                + "! "
                                 + random.choice(shoutend)
                             )
 
-                    else:
-                        room.message(
-                            random.choice(shoutstart)
-                            + " "
-                            + random.choice(room.usernames)
-                            + "! "
-                            + random.choice(shoutend)
-                        )
 
-
-                elif cmd == "tag":
-                    room.delete(message)
-                    splitmsg = message.body.split(" ")
-                    if len(splitmsg) > 2:
-                        maybegif = splitmsg[1]
-                        maybekey = splitmsg[2]
-                        if (maybegif.startswith("http") and maybegif.endswith(".gif")):
-                            print("might be gif")
-                            if maybegif in allgif_set:
-                                pass
-
-                            else:
-                                print('not in set')
-                                allgif_set.add(maybegif)
-                                with open(allgif_file,'a') as file:
-                                    file.write(maybegif + "\n")
-
-                            if len(maybekey)<20:
-                                print(maybekey)
-                                if maybekey not in commandlist:
-                                    if maybekey in d:
-                                        d[maybekey].append(maybegif)
-                                    else:
-                                        d[maybekey] = []
-                                        d[maybekey].append(maybegif)
-
-                                    with open(d_json_file, 'w') as fp:
-                                        json.dump(d, fp)
-
-                else:
-                    if cmd in d:
+                    elif cmd == "tag":
                         room.delete(message)
-                        room.message(random.choice(d[cmd]))
+                        splitmsg = message.body.split(" ")
+                        if len(splitmsg) > 2:
+                            maybegif = splitmsg[1]
+                            maybekey = splitmsg[2]
+                            if (maybegif.startswith("http") and maybegif.endswith(".gif")):
+                                print("might be gif")
+                                if maybegif in allgif_set:
+                                    pass
+
+                                else:
+                                    print('not in set')
+                                    allgif_set.add(maybegif)
+                                    with open(allgif_file,'a') as file:
+                                        file.write(maybegif + "\n")
+
+                                if len(maybekey)<20:
+                                    print(maybekey)
+                                    if maybekey not in commandlist:
+                                        if maybekey in d:
+                                            d[maybekey].append(maybegif)
+                                        else:
+                                            d[maybekey] = []
+                                            d[maybekey].append(maybegif)
+
+                                        with open(d_json_file, 'w') as fp:
+                                            json.dump(d, fp)
+
+                    else:
+                        if cmd in d:
+                            room.delete(message)
+                            room.message(random.choice(d[cmd]))
 
 
 
