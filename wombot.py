@@ -48,14 +48,13 @@ commandlist = ["help","fortune","id1","id2",
                 "gif", "gift", "bigb","b2b2b"
                 "say","kiss","shoutout","chunt","mods","tag","g","wombat","capybara","otter","quokka"]
 
-helpmessage = "your friendly spambot \r here to spam gifs and give trackids \r\r" + \
-                "commands: \r \r!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r " + \
-                "GIFs: \r!gif for random dance gif \r!gift or !bigb for gifs from bigbunnybrer's collection \r" + \
-                "!shoutout @username  \r " + \
-                "!kiss @username \r" + \
-                "!b2b back2back of bigbunnybrer gifs \r \r " + \
-                "also: !bbbb !fortune !tags  \r \r " + \
-                "gifs stolen from oscmal, bigbunnybrer and every poster in this channel \r\r keep chunting"
+helpmessage = "commands: \r \r " + \
+                "GIFs: \r!gif (random dance gif) \r!gift / !b2b / !bbb (more gifs) \r" + \
+                "!shoutout [user]  \r " + \
+                "!fortune (your daily fortune)  \r \r " + \
+                "!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r" + \
+                "gifs curated by oscmal, bigbunnybrer and others \r \r" + \
+                "keep chuntin!" 
 
 shoutstart = [
     "out to you, ",
@@ -249,7 +248,7 @@ class WomBot(ch.RoomManager):
                 elif cmd in ["gif"]:
                     room.delete(message)
                     gifone = random.choice(d["dance"])
-                    room.message(gifone + " " + gifone + " " + gifone)
+                    room.message(gifone)
 
                 elif cmd == "b2b":
                     room.delete(message)
@@ -302,16 +301,26 @@ class WomBot(ch.RoomManager):
                         # print(args)
                         # print('.......')
                         splitargs = args.split(" ")
-                        # for arg in splitargs:
-                        # if arg.startswith('@'):
-                        # print(arg)
-                        room.message(
-                            random.choice(shoutstart)
-                            + " "
-                            + (splitargs[0])
-                            + " ! "
-                            + random.choice(shoutend)
-                        )
+                        if args.startswith("@"):
+                            for arg in splitargs:
+                                print('arg ',arg)
+                                if arg.startswith('@'):
+                                    room.message(
+                                        random.choice(shoutstart)
+                                        + " "
+                                        + (arg)
+                                        + " ! "
+                                        + random.choice(shoutend)
+                            )
+
+                        else:
+                            room.message(
+                                random.choice(shoutstart)
+                                + " "
+                                + (args)
+                                + " ! "
+                                + random.choice(shoutend)
+                            )
 
                     else:
                         room.message(
