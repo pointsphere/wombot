@@ -14,14 +14,9 @@ ENVIRONMENT = getenv("ENVIRONMENT")
 # Chatango credentials
 CHATANGO_USERS = {
     "wombot": {
-        #"USERNAME": getenv("CHATANGO_BOT_USERNAME"),
-        #"PASSWORD": getenv("CHATANGO_BOT_PASSWORD"),
-        "USERNAME": "wombot",
-        "PASSWORD": "blaSNA1234!"
-    },
-    "BROIESTBRO": {
-        "USERNAME": getenv("CHATANGO_BRO_USERNAME"),
-        "PASSWORD": getenv("CHATANGO_BRO_PASSWORD"),
+        "USERNAME": getenv("CHATANGO_BOT_USERNAME"),
+        "PASSWORD": getenv("CHATANGO_BOT_PASSWORD"),
+        
     },
 }
 
