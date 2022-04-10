@@ -221,11 +221,7 @@ class WomBot(ch.RoomManager):
                         self.pm.message(user,str(thelongeststring))
 
                     elif cmd in ["id1","idch1"]:
-<<<<<<< HEAD
-                        room.delete(message)
-=======
                         room.delete_message(message)
->>>>>>> ch
                         trackid_unstripped = get_id_nts.run("1")
                         trackid_split = trackid_unstripped.split("\n")
                         stripped = trackid_unstripped.replace("\n", " - ").replace(
@@ -239,13 +235,9 @@ class WomBot(ch.RoomManager):
                         else:
                             room.message("ID1: " + stripped + " | no bandcamp found. ")
 
-<<<<<<< HEAD
                     elif cmd in ["id2","idch2"]:
-                        room.delete(message)
-=======
-                    elif cmd in ["id1","idch1"]:
                         room.delete_message(message)
->>>>>>> ch
+                    
                         trackid_unstripped = get_id_nts.run("2")
                         trackid_split = trackid_unstripped.split("\n")
                         stripped = trackid_unstripped.replace("\n", " - ").replace(
