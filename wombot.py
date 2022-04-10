@@ -11,7 +11,7 @@ import time
 from collections import defaultdict
 import validators
 import search_google
-#from gif_sort import dance
+
 
 import secrets
 import data_pics_wombat
@@ -24,6 +24,7 @@ import json
 
 
 from os import environ
+
 # environ['VAR_NAME']
 
 
@@ -40,22 +41,46 @@ chatango_pass = secrets.chatango_pass
 tenor_key = secrets.tenor_key
 
 myrooms = []
-myrooms.append(environ['wombotmainroom'])
-myrooms.append(environ['wombottestroom'])
+myrooms.append(environ["wombotmainroom"])
+myrooms.append(environ["wombottestroom"])
 
 
-commandlist = ["help","fortune","id1","id2",
-                "iddy","ev","eval","e","bbb", 
-                "gif", "gift", "bigb","b2b2b"
-                "say","kiss","shoutout","chunt","mods","tag","g","wombat","capybara","otter","quokka"]
+commandlist = [
+    "help",
+    "fortune",
+    "id1",
+    "id2",
+    "iddy",
+    "ev",
+    "eval",
+    "e",
+    "bbb",
+    "gif",
+    "gift",
+    "bigb",
+    "b2b2b",
+    "say",
+    "kiss",
+    "shoutout",
+    "chunt",
+    "mods",
+    "tag",
+    "g",
+    "wombat",
+    "capybara",
+    "otter",
+    "quokka",
+]
 
-helpmessage = "commands: \r \r " + \
-                "GIFs: \r!gif (random dance gif) \r!gift / !b2b / !bbb (more gifs) \r" + \
-                "!shoutout [user]  \r " + \
-                "!fortune (your daily fortune)  \r \r " + \
-                "!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r" + \
-                "gifs curated by oscmal, bigbunnybrer and others \r \r" + \
-                "keep chuntin!" 
+helpmessage = (
+    "commands: \r \r "
+    + "GIFs: \r!gif (random dance gif) \r!gift / !b2b / !bbb (more gifs) \r"
+    + "!shoutout [user]  \r "
+    + "!fortune (your daily fortune)  \r \r "
+    + "!id1 for NTS1 \r!id2 for NTS2 \r!iddy for DoYouWorld \r \r"
+    + "gifs curated by oscmal, bigbunnybrer and others \r \r"
+    + "keep chuntin!"
+)
 
 shoutstart = [
     "out to you, ",
@@ -63,11 +88,11 @@ shoutstart = [
     "much love out to ",
     "out to the amazing ",
     "out to the unimitable",
-    ]
+]
 
-shoutend = ["😘", "❤️", "💙","*h*","<3"]
+shoutend = ["😘", "❤️", "💙", "*h*", "<3"]
 
-gifhosts = ["https://c.tenor.com/","https://media.giphy.com/"]
+gifhosts = ["https://c.tenor.com/", "https://media.giphy.com/"]
 
 basepath = Path().absolute()
 bbb_file = os.path.join(basepath, "bbb.txt")
@@ -76,7 +101,7 @@ with open(bbb_file) as file:
 
 allgif_file = os.path.join(basepath, "allgif.txt")
 if not os.path.exists(allgif_file):
-    with open(allgif_file,'a') as file:
+    with open(allgif_file, "a") as file:
         pass
 else:
     with open(allgif_file) as file:
@@ -85,9 +110,9 @@ else:
 d = defaultdict(list)
 d_json_file = os.path.join(basepath, "gif_tagged.json")
 if not os.path.exists(d_json_file):
-    with open(d_json_file,"w") as f:
+    with open(d_json_file, "w") as f:
         pass
-    
+
 else:
     with open(d_json_file) as f:
         d_str = json.loads(f.read())
@@ -99,7 +124,7 @@ for k in d_str:
 
 
 print(d)
-print('init variables done')
+print("init variables done")
 ##Dance moves!
 # kinda useless
 
@@ -117,7 +142,7 @@ class WomBot(ch.RoomManager):
         self.set_font_size(10)
         self.enable_bg()
         self.enable_recording()
-        print('wombot on_init')
+        print("wombot on_init")
 
     ##Connecting
     # This is what will be printed on your python console when event called
@@ -129,21 +154,20 @@ class WomBot(ch.RoomManager):
         print("Reconnected")
 
     def on_disconnect(self, room):
-        print("Disconnected")
-        time.sleep(5)
-        room.reconnect()
-        
+        print("wombot.py, on_disconnect, Disconnected")
+        # time.sleep(5)
+        # print(room)
+        # room.reconnect()
 
     def on_message(self, room, user, message):
         try:
             if room.get_level(self.user) > 0:
-                print(user.name, message.body,room.get_level(user))
+                print(user.name, message.body, room.get_level(user))
             else:
-                print(user.name, message.body,room.get_level(user))
+                print(user.name, message.body, room.get_level(user))
             if self.user == user:
                 return
 
-            
             if message.body[0] == "!":  ##Here is the Prefix part
                 data = message.body[1:].split(" ", 1)
                 if len(data) > 1:
@@ -156,7 +180,7 @@ class WomBot(ch.RoomManager):
 
                 ##Eval
                 ##You may want/need to evaluate something about your bot.
-                '''
+                """
                 if cmd == "ev" or cmd == "eval" or cmd == "e":
                     room.delete_message(message)
                     ret = eval(args)
@@ -164,7 +188,7 @@ class WomBot(ch.RoomManager):
                         room.message("Done.")
                         return
                     room.message(str(ret))
-                    '''
+                    """
                 if self._sleepmode == True:
                     if cmd == ("start"):
                         room.delete_message(message)
@@ -176,16 +200,28 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         if room.get_level(user) > 0:
                             self._sleepmode = True
-                    
-                        
+
                     elif cmd == "help":
                         print(helpmessage)
                         room.delete_message(message)
-                        self.pm.message(user,helpmessage)
+                        self.pm.message(user, helpmessage)
+
+                    elif cmd == "disconnect":
+                        room.delete_message(message)
+                        if room.get_level(user) > 0:
+                            print("should now disconnect")
+                            room.disconnect()
 
                     elif cmd == "fortune":
                         room.delete_message(message)
-                        room.message("your fortune, " + user.name + " : " + (random.choice(fortunes.fortunecookie)).replace(".","").lower())
+                        room.message(
+                            "your fortune, "
+                            + user.name
+                            + " : "
+                            + (random.choice(fortunes.fortunecookie))
+                            .replace(".", "")
+                            .lower()
+                        )
                     elif cmd == "wombat":
                         room.delete_message(message)
                         room.message(random.choice(data_pics_wombat.pics))
@@ -211,16 +247,18 @@ class WomBot(ch.RoomManager):
                         dict_keys = d.keys()
                         taglist = []
                         for key in dict_keys:
-                            #print(key)
+                            # print(key)
                             taglist.append(key)
-                        thelongeststring = 'to tag a gif: !tag link-to-the-gif tagname \r'
+                        thelongeststring = (
+                            "to tag a gif: !tag link-to-the-gif tagname \r"
+                        )
                         for key in taglist:
-                            thelongeststring +=  "!" + key + " "
+                            thelongeststring += "!" + key + " "
                         print(thelongeststring)
-                            
-                        self.pm.message(user,str(thelongeststring))
 
-                    elif cmd in ["id1","idch1"]:
+                        self.pm.message(user, str(thelongeststring))
+
+                    elif cmd in ["id1", "idch1"]:
                         room.delete_message(message)
                         trackid_unstripped = get_id_nts.run("1")
                         trackid_split = trackid_unstripped.split("\n")
@@ -231,13 +269,15 @@ class WomBot(ch.RoomManager):
                         res = search_google.search(googlequery)
                         if res is not None:
                             bc_link = res[0]["link"]
-                            room.message("ID1: " + stripped + " | maybe it's: " + bc_link)
+                            room.message(
+                                "ID1: " + stripped + " | maybe it's: " + bc_link
+                            )
                         else:
                             room.message("ID1: " + stripped + " | no bandcamp found. ")
 
-                    elif cmd in ["id2","idch2"]:
+                    elif cmd in ["id2", "idch2"]:
                         room.delete_message(message)
-                    
+
                         trackid_unstripped = get_id_nts.run("2")
                         trackid_split = trackid_unstripped.split("\n")
                         stripped = trackid_unstripped.replace("\n", " - ").replace(
@@ -247,7 +287,9 @@ class WomBot(ch.RoomManager):
                         res = search_google.search(googlequery)
                         if res is not None:
                             bc_link = res[0]["link"]
-                            room.message("ID2: " + stripped + " | maybe it's: " + bc_link)
+                            room.message(
+                                "ID2: " + stripped + " | maybe it's: " + bc_link
+                            )
                         else:
                             room.message("ID2: " + stripped + " | no bandcamp found. ")
 
@@ -256,12 +298,12 @@ class WomBot(ch.RoomManager):
                         doyou_id_str = get_id_doyou.get()
                         if doyou_id_str != None:
                             print(doyou_id_str)
-                            #room.message( doyou_id_str)
+                            # room.message( doyou_id_str)
                             room.message("ID DoYou: " + doyou_id_str)
                         else:
                             room.message("ID DoYou: No ID found, sorry")
 
-                    elif cmd in ["bbb", "bigb","gift"]:
+                    elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)
                         gifone = random.choice(tuple(bbb_set))
                         room.message(gifone + " " + gifone + " " + gifone)
@@ -278,7 +320,7 @@ class WomBot(ch.RoomManager):
 
                         room.message(gifone + " " + giftwo + " " + gifone)
 
-                    elif cmd in ["b2b2b","bbbb"]:
+                    elif cmd in ["b2b2b", "bbbb"]:
                         room.delete_message(message)
                         gifone = random.choice(tuple(bbb_set))
                         giftwo = random.choice(tuple(bbb_set))
@@ -311,11 +353,10 @@ class WomBot(ch.RoomManager):
 
                     ##List Mods
                     # List of Mods and Owner name in the current room you're in
-                    elif cmd == "mods":
-                        room.delete_message(message)
-                        room.message(", ".join(room.modnames + [room.ownername]))
+                    # elif cmd == "mods":
+                    #    room.delete_message(message)
+                    #    room.message(", ".join(room.modnames + [room.ownername]))
 
-                    
                     elif cmd == "shoutout":
                         room.delete_message(message)
                         if args:
@@ -324,15 +365,15 @@ class WomBot(ch.RoomManager):
                             splitargs = args.split(" ")
                             if args.startswith("@"):
                                 for arg in splitargs:
-                                    print('arg ',arg)
-                                    if arg.startswith('@'):
+                                    print("arg ", arg)
+                                    if arg.startswith("@"):
                                         room.message(
                                             random.choice(shoutstart)
                                             + " "
                                             + (arg)
                                             + " ! "
                                             + random.choice(shoutend)
-                                )
+                                        )
 
                             else:
                                 room.message(
@@ -352,60 +393,61 @@ class WomBot(ch.RoomManager):
                                 + random.choice(shoutend)
                             )
 
-
                     elif cmd == "tag":
-                        room.delete_message(message)
-                        splitmsg = message.body.split(" ")
-                        if len(splitmsg) > 2:
-                            maybegif = splitmsg[1]
-                            maybekey = splitmsg[2]
-                            if (maybegif.startswith("http") and maybegif.endswith(".gif")):
-                                print("might be gif")
-                                if maybegif in allgif_set:
-                                    pass
+                        if room.get_level(self.user) > 0:
+                            room.delete_message(message)
+                            splitmsg = message.body.split(" ")
+                            if len(splitmsg) > 2:
+                                maybegif = splitmsg[1]
+                                maybekey = splitmsg[2]
+                                if maybegif.startswith("http") and maybegif.endswith(
+                                    ".gif"
+                                ):
+                                    print("might be gif")
+                                    if maybegif in allgif_set:
+                                        pass
 
-                                else:
-                                    print('not in set')
-                                    allgif_set.add(maybegif)
-                                    with open(allgif_file,'a') as file:
-                                        file.write(maybegif + "\n")
+                                    else:
+                                        print("not in set")
+                                        allgif_set.add(maybegif)
+                                        with open(allgif_file, "a") as file:
+                                            file.write(maybegif + "\n")
 
-                                if len(maybekey)<20:
-                                    print(maybekey)
-                                    if maybekey not in commandlist:
-                                        if maybekey in d:
-                                            d[maybekey].append(maybegif)
-                                        else:
-                                            d[maybekey] = []
-                                            d[maybekey].append(maybegif)
+                                    if len(maybekey) < 20:
+                                        print(maybekey)
+                                        if maybekey not in commandlist:
+                                            if maybekey in d:
+                                                d[maybekey].append(maybegif)
+                                            else:
+                                                d[maybekey] = []
+                                                d[maybekey].append(maybegif)
 
-                                        with open(d_json_file, 'w') as fp:
-                                            json.dump(d, fp)
+                                            with open(d_json_file, "w") as fp:
+                                                json.dump(d, fp)
 
                     else:
                         if cmd in d:
                             room.delete_message(message)
                             room.message(random.choice(d[cmd]))
 
-
-
             else:
                 # very crude way to catch posted gifs and add them to allgif_set and allgif_file
                 splitmsg = message.body.split(" ")
                 for word in splitmsg:
-                    if (any(word.startswith(host) for host in gifhosts) and word.endswith(".gif") and (len(word)<75)):
+                    if (
+                        any(word.startswith(host) for host in gifhosts)
+                        and word.endswith(".gif")
+                        and (len(word) < 75)
+                    ):
                         print("might be gif")
                         if word in allgif_set:
                             pass
 
                         else:
-                            print('not in set')
+                            print("not in set")
                             allgif_set.add(word)
-                            with open(allgif_file,'a') as file:
+                            with open(allgif_file, "a") as file:
                                 file.write(word + "\n")
-                                
-
-
 
         except Exception as e:
             try:
@@ -427,8 +469,8 @@ class WomBot(ch.RoomManager):
         time.sleep(5)
         room.reconnect()
 
-    # apparently pm. is the wrong object, triggers 2 times but crashes 2nd time because it's "None". where is right pm.? 
-    '''
+    # apparently pm. is the wrong object, triggers 2 times but crashes 2nd time because it's "None". where is right pm.?
+    """
     def onPMMessage(self, pm, user, body):
         print("PM recvd")
         print('pm obj',pm)
@@ -478,7 +520,7 @@ class WomBot(ch.RoomManager):
                             self.pm.message(user,random.choice(d[cmd]))
             else:
                 pass
-                '''
+                """
 
     def onJoin(self, room, user):
         print(user.name + " joined the chat!")

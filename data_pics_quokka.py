@@ -26,4 +26,4 @@ pics = [
     "https://i.imgur.com/u0iTPY8.jpeg",
     "https://i.imgur.com/tX1CSUG.jpeg",
     "https://i.imgur.com/bI70gBD.jpeg",
-    ]
+]

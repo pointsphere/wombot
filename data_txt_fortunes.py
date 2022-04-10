@@ -353,4 +353,4 @@ fortunecookie = [
     "Your success will astonish everyone. ",
     "Your talents will be recognized and suitably rewarded.",
     "Your work interests can capture the highest status or prestige.",
-    ]
+]

@@ -2,6 +2,7 @@ import requests
 import urllib.parse as urlparse
 import secrets
 
+
 def search(query):
     params = {
         "key": secrets.google_key,

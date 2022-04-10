@@ -1,4 +1,3 @@
-
 import html
 import queue
 import random
@@ -277,7 +276,8 @@ def _get_anon_id(n, ssid):
         n = "5504"
     try:
         return "".join(
-            str(x + y)[-1] for x, y in zip((int(x) for x in n), (int(x) for x in ssid[4:]))
+            str(x + y)[-1]
+            for x, y in zip((int(x) for x in n), (int(x) for x in ssid[4:]))
         )
     except ValueError:
         return "NNNN"
@@ -546,6 +546,7 @@ class PM:
         self._call_event("on_pm_disconnect")
 
     def _disconnect(self):
+        print("pm, _disconnect")
         self._connected = False
         self._sock.close()
         self._sock = None
@@ -680,6 +681,7 @@ class PM:
         self._call_event("on_pm_contact_offline", user)
 
     def _rcmd_kickingoff(self, args):
+        print("pm, _rcmd_kickingoff")
         self.disconnect()
 
     def _rcmd_toofast(self, args):
@@ -886,11 +888,14 @@ class Room:
 
     def disconnect(self):
         """Disconnect."""
+        LOGGER.error(f"Room, disconnect")
         self._disconnect()
+        # self._reconnect()
         self._call_event("on_disconnect")
 
     def _disconnect(self):
         """Disconnect from the server."""
+        LOGGER.error(f"Room, _disconnect")
         if not self._reconnecting:
             self.connected = False
         for user in self._userlist:
@@ -905,7 +910,9 @@ class Room:
         """Authenticate."""
         # login as name with password
         if self.mgr.name and self.mgr.password:
-            self._send_command("bauth", self.room_name, self._uid, self.mgr.name, self.mgr.password)
+            self._send_command(
+                "bauth", self.room_name, self._uid, self.mgr.name, self.mgr.password
+            )
             self._currentname = self.mgr.name
         # login as anon
         else:
@@ -986,7 +993,9 @@ class Room:
         return list(self._ban_list.keys())
 
     def _get_unban_list(self):
-        return [[record["target"], record["src"]] for record in self._unban_list.values()]
+        return [
+            [record["target"], record["src"]] for record in self._unban_list.values()
+        ]
 
     room_name = property(_get_room_name)
     botname = property(_get_bot_name)
@@ -1038,7 +1047,12 @@ class Room:
                     elif info.opcode == _ws.TEXT:
                         self._process(payload)
                     elif debug:
-                        print("unhandled frame: " + repr(info) + " with payload " + repr(payload))
+                        print(
+                            "unhandled frame: "
+                            + repr(info)
+                            + " with payload "
+                            + repr(payload)
+                        )
                     r = _ws.check_frame(self._rbuf)
         else:
             while b"\0" in self._rbuf:
@@ -1188,7 +1202,10 @@ class Room:
             msg.attach(self, args[1])
             self._add_history(msg)
             self._call_event("on_message", msg.user, msg)
-            print("received a message")
+            # print("received a message")
+            # LOGGER.error(f"logger, received a message: {msg}.")
+            # print("message was: ",  msg)
+            # print("message body:", msg.body)
         # possible this came first (out of order)
         else:
             self._uqueue[args[0]] = args[1]
@@ -1807,6 +1824,8 @@ class RoomManager:
 
         :param str room: room to leave
         """
+        print("roommanager, leave_room")
+        LOGGER.error(f"roommanager, leave_room.")
         if room in self._rooms:
             with self._rooms_lock:
                 con = self._rooms[room]
@@ -2396,7 +2415,7 @@ class RoomManager:
         self = cls(name=name, password=password)
         for room in rooms:
             self.join_room(room)
-        print('easy_start complete, joined rooms')
+        print("easy_start complete, joined rooms")
         self.main()
 
     def stop(self):

@@ -16,10 +16,10 @@ def get():
     tracktime = firstli.find(("p", {"class": re.compile(r"^Track_time")}))
     trackartist = firstli.find(("h2", {"class": re.compile(r"^Track_artist")}))
     tracktitle = firstli.find(("h1", {"class": re.compile(r"^Track_title")}))
-    if (tracktime and trackartist and tracktitle):
+    if tracktime and trackartist and tracktitle:
         return tracktime.text + ": " + trackartist.text + " - " + tracktitle.text
     else:
-        print('no result')
+        print("no result")
         return None
 
 
