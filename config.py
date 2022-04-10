@@ -1,7 +1,7 @@
 """Bot configuration variables."""
 from os import environ, getenv, path
 
-import pytz
+#import pytz
 #from dotenv import load_dotenv
 
 BASE_DIR = path.abspath(path.dirname(__file__))
