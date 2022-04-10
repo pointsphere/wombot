@@ -216,7 +216,7 @@ class WomBot(ch.RoomManager):
                             
                         self.pm.message(user,str(thelongeststring))
 
-                    elif cmd == "id1":
+                    elif cmd in ["id1","idch1"]:
                         room.delete(message)
                         trackid_unstripped = get_id_nts.run("1")
                         trackid_split = trackid_unstripped.split("\n")
@@ -231,7 +231,7 @@ class WomBot(ch.RoomManager):
                         else:
                             room.message("ID1: " + stripped + " | no bandcamp found. ")
 
-                    elif cmd == "id2":
+                    elif cmd in ["id2","idch2"]:
                         room.delete(message)
                         trackid_unstripped = get_id_nts.run("2")
                         trackid_split = trackid_unstripped.split("\n")
