@@ -158,6 +158,9 @@ class WomBot(ch.RoomManager):
         # time.sleep(5)
         # print(room)
         # room.reconnect()
+        # self.set_timeout(5, self.join_room(room.room_name)) # fails, maybe because other room can't tick
+        # trying to rejoin instantly after disconnect, this might backfire
+        self.join_room(room.room_name)
 
     def on_message(self, room, user, message):
         try:
