@@ -1188,6 +1188,7 @@ class Room:
             msg.attach(self, args[1])
             self._add_history(msg)
             self._call_event("on_message", msg.user, msg)
+            print("received a message")
         # possible this came first (out of order)
         else:
             self._uqueue[args[0]] = args[1]
