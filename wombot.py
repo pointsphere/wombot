@@ -99,7 +99,7 @@ for k in d_str:
 
 
 print(d)
-
+print('init variables done')
 ##Dance moves!
 # kinda useless
 
@@ -117,6 +117,7 @@ class WomBot(ch.RoomManager):
         self.setFontSize(10)
         self.enableBg()
         self.enableRecording()
+        print('wombot onInit')
 
     ##Connecting
     # This is what will be printed on your python console when event called
