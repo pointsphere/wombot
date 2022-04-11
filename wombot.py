@@ -238,6 +238,10 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message(random.choice(worms))
 
+                    elif cmd in ["trashcan","trash","bins","cans","bin","trashcans"]:
+                        room.delete_message(message)
+                        room.message("https://c.tenor.com/zwrFrOZn9HUAAAAd/bin-can-can-dancing-trash.gif")
+
                     elif cmd == "wombat":
                         room.delete_message(message)
                         room.message(random.choice(data_pics_wombat.pics))
