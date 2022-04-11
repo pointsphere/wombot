@@ -70,6 +70,7 @@ commandlist = [
     "capybara",
     "otter",
     "quokka",
+    "worm"
 ]
 
 helpmessage = (
@@ -89,6 +90,13 @@ shoutstart = [
     "out to the amazing ",
     "out to the unimitable",
 ]
+
+worms = ["https://media.giphy.com/media/4ZAMJ2yArzMqCOlP03/giphy.gif",
+            "https://media.giphy.com/media/QYeX2ECQ1YpmZRzmfA/giphy.gif",
+            "https://media.giphy.com/media/Um8jaZlC11wmpAcyOw/giphy.gif",
+            "https://media.giphy.com/media/QicmUx0GygTvtv7MgG/giphy.gif",
+            "https://media.giphy.com/media/Mlu7VoB6nxC0z96pkd/giphy.gif",
+            "https://media.giphy.com/media/5HQ2n2gl6V9DA9bHkl/giphy.gif",]
 
 shoutend = ["😘", "❤️", "💙", "*h*", "<3"]
 
@@ -225,6 +233,11 @@ class WomBot(ch.RoomManager):
                             .replace(".", "")
                             .lower()
                         )
+
+                    elif cmd == "worm":
+                        room.delete_message(message)
+                        room.message(random.choice(worms))
+
                     elif cmd == "wombat":
                         room.delete_message(message)
                         room.message(random.choice(data_pics_wombat.pics))
