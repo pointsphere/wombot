@@ -238,7 +238,7 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message(random.choice(worms))
 
-                    elif cmd in ["whatdoesitmean","benufo","ufo"]:
+                    elif cmd in ["whatdoesthatmean","benufo","ufo"]:
                         room.delete_message(message)
                         room.message("https://f001.backblazeb2.com/file/chuntongo/ben_ufo-whatdoesthatmean.mp3")
 
