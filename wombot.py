@@ -215,6 +215,7 @@ class WomBot(ch.RoomManager):
                     elif cmd == "help":
                         print(helpmessage)
                         room.delete_message(message)
+                        room.message(helpmessage)
                         self.pm.message(user, helpmessage)
 
                     elif cmd == "disconnect":
@@ -381,7 +382,7 @@ class WomBot(ch.RoomManager):
                     #    room.delete_message(message)
                     #    room.message(", ".join(room.modnames + [room.ownername]))
 
-                    elif cmd == "shoutout":
+                    elif cmd in ["shoutout","shout"]:
                         room.delete_message(message)
                         if args:
                             # print(args)
