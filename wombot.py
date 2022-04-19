@@ -238,6 +238,10 @@ class WomBot(ch.RoomManager):
                     elif cmd == "worm":
                         room.delete_message(message)
                         room.message(random.choice(worms))
+                        
+                    elif cmd in ["legalize", "legalise","legalize it","legalise it","blaze","420","blazeit","blaze it"]:
+                        room.delete_message(message)
+                        room.message(random.choice(tuple(bbb_set)) + " " + "https://media.giphy.com/media/VeGFReghsvt05wD341/giphy.gif")
 
                     elif cmd in ["whatdoesthatmean","benufo","ufo"]:
                         room.delete_message(message)
