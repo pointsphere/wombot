@@ -372,7 +372,7 @@ class WomBot(ch.RoomManager):
                                 if arg.startswith("@"):
                                     print(arg)
                                     room.message("You are a bg " + (arg))
-                                    
+
                     elif cmd == "kiss":
                         room.delete_message(message)
                         if args:
@@ -390,7 +390,7 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message("I'm chuntin")
 
-                    elif cmd == "tags"
+                    #elif cmd == "tags"
 
                     ##List Mods
                     # List of Mods and Owner name in the current room you're in
