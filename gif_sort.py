@@ -214,6 +214,15 @@ worm = {
     "og": "https://media.giphy.com/media/5HQ2n2gl6V9DA9bHkl/giphy.gif",
 }
 
+worm = [
+    "https://media.giphy.com/media/4ZAMJ2yArzMqCOlP03/giphy.gif",
+    "https://media.giphy.com/media/QYeX2ECQ1YpmZRzmfA/giphy.gif",
+    "https://media.giphy.com/media/Um8jaZlC11wmpAcyOw/giphy.gif",
+    "https://media.giphy.com/media/QicmUx0GygTvtv7MgG/giphy.gif",
+    "https://media.giphy.com/media/Mlu7VoB6nxC0z96pkd/giphy.gif",
+    "https://media.giphy.com/media/5HQ2n2gl6V9DA9bHkl/giphy.gif",
+]
+
 yoshi = [
     "https://media.giphy.com/media/0C9D8UsspENhHbKib7/giphy.gif",
     "https://media.giphy.com/media/oi7F1rWkvGXvVFNj79/giphy.gif",

@@ -19,11 +19,12 @@ import data_pics_capybara
 import data_pics_otter
 import data_pics_quokka
 import data_txt_fortunes as fortunes
-import data_gif_hardcoded
-import json
-
+#import data_gif_hardcoded
+#import json
+import sqliteclass
 
 from os import environ
+db = sqliteclass.sqlite3class()
 
 # environ['VAR_NAME']
 
@@ -70,7 +71,7 @@ commandlist = [
     "capybara",
     "otter",
     "quokka",
-    "worm"
+    "worm",
 ]
 
 helpmessage = (
@@ -90,14 +91,16 @@ shoutstart = [
     "out to the amazing ",
     "out to the unimitable",
 ]
-
-worms = ["https://media.giphy.com/media/4ZAMJ2yArzMqCOlP03/giphy.gif",
-            "https://media.giphy.com/media/QYeX2ECQ1YpmZRzmfA/giphy.gif",
-            "https://media.giphy.com/media/Um8jaZlC11wmpAcyOw/giphy.gif",
-            "https://media.giphy.com/media/QicmUx0GygTvtv7MgG/giphy.gif",
-            "https://media.giphy.com/media/Mlu7VoB6nxC0z96pkd/giphy.gif",
-            "https://media.giphy.com/media/5HQ2n2gl6V9DA9bHkl/giphy.gif",]
-
+'''
+worms = [
+    "https://media.giphy.com/media/4ZAMJ2yArzMqCOlP03/giphy.gif",
+    "https://media.giphy.com/media/QYeX2ECQ1YpmZRzmfA/giphy.gif",
+    "https://media.giphy.com/media/Um8jaZlC11wmpAcyOw/giphy.gif",
+    "https://media.giphy.com/media/QicmUx0GygTvtv7MgG/giphy.gif",
+    "https://media.giphy.com/media/Mlu7VoB6nxC0z96pkd/giphy.gif",
+    "https://media.giphy.com/media/5HQ2n2gl6V9DA9bHkl/giphy.gif",
+]
+'''
 shoutend = ["😘", "❤️", "💙", "*h*", "<3"]
 
 gifhosts = ["https://c.tenor.com/", "https://media.giphy.com/"]
@@ -114,7 +117,7 @@ if not os.path.exists(allgif_file):
 else:
     with open(allgif_file) as file:
         allgif_set = set(line.strip() for line in file)
-
+'''
 d = defaultdict(list)
 d_json_file = os.path.join(basepath, "gif_tagged.json")
 if not os.path.exists(d_json_file):
@@ -132,6 +135,7 @@ for k in d_str:
 
 
 print(d)
+'''
 print("init variables done")
 ##Dance moves!
 # kinda useless
@@ -239,17 +243,42 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message(random.choice(worms))
 
-                    elif cmd in ["legalize","legalizeit","legalise","legalize it","legalise it","blaze","420","blazeit","blaze it"]:
+                    elif cmd in [
+                        "legalize",
+                        "legalizeit",
+                        "legalise",
+                        "legalize it",
+                        "legalise it",
+                        "blaze",
+                        "420",
+                        "blazeit",
+                        "blaze it",
+                    ]:
                         room.delete_message(message)
-                        room.message(random.choice(tuple(bbb_set)) + " " + "https://media.giphy.com/media/VeGFReghsvt05wD341/giphy.gif")
+                        room.message(
+                            random.choice(tuple(bbb_set))
+                            + " "
+                            + "https://media.giphy.com/media/VeGFReghsvt05wD341/giphy.gif"
+                        )
 
-                    elif cmd in ["whatdoesthatmean","benufo","ufo"]:
+                    elif cmd in ["whatdoesthatmean", "benufo", "ufo"]:
                         room.delete_message(message)
-                        room.message("https://f001.backblazeb2.com/file/chuntongo/ben_ufo-whatdoesthatmean.mp3")
+                        room.message(
+                            "https://f001.backblazeb2.com/file/chuntongo/ben_ufo-whatdoesthatmean.mp3"
+                        )
 
-                    elif cmd in ["trashcan","trash","bins","cans","bin","trashcans"]:
+                    elif cmd in [
+                        "trashcan",
+                        "trash",
+                        "bins",
+                        "cans",
+                        "bin",
+                        "trashcans",
+                    ]:
                         room.delete_message(message)
-                        room.message("https://c.tenor.com/zwrFrOZn9HUAAAAd/bin-can-can-dancing-trash.gif")
+                        room.message(
+                            "https://c.tenor.com/zwrFrOZn9HUAAAAd/bin-can-can-dancing-trash.gif"
+                        )
 
                     elif cmd == "wombat":
                         room.delete_message(message)
@@ -267,9 +296,7 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message(random.choice(data_pics_quokka.pics))
 
-                    elif cmd == "fesh":
-                        room.delete_message(message)
-                        room.message(data_gif_hardcoded.fesh)
+                    
 
                     elif cmd == "tags":
                         room.delete_message(message)
@@ -334,27 +361,37 @@ class WomBot(ch.RoomManager):
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)
-                        gifone = random.choice(tuple(bbb_set))
+
+                        #gifone = random.choice(tuple(bbb_set))
+                        gifone = random.choice(db.fetch_gif("bbb"))
                         room.message(gifone + " " + gifone + " " + gifone)
 
                     elif cmd in ["gif"]:
                         room.delete_message(message)
-                        gifone = random.choice(d["dance"])
+                        #gifone = random.choice(d["dance"])
+                        gifone = random.choice(db.fetch_gif("dance"))
                         room.message(gifone)
 
                     elif cmd == "b2b":
                         room.delete_message(message)
+                        '''
                         gifone = random.choice(tuple(bbb_set))
                         giftwo = random.choice(tuple(bbb_set))
-
+                        '''
+                        gifone = random.choice(db.fetch_gif("bbb"))
+                        giftwo = random.choice(db.fetch_gif("bbb"))
                         room.message(gifone + " " + giftwo + " " + gifone)
 
-                    elif cmd in ["b2b2b", "bbbb"]:
+                    elif cmd in ["b2b2b", "bbbb","b3b"]:
                         room.delete_message(message)
+                        '''
                         gifone = random.choice(tuple(bbb_set))
                         giftwo = random.choice(tuple(bbb_set))
                         gifthree = random.choice(tuple(bbb_set))
-
+                        '''
+                        gifone = random.choice(db.fetch_gif("bbb"))
+                        giftwo = random.choice(db.fetch_gif("bbb"))
+                        gifthree = random.choice(db.fetch_gif("bbb"))
                         room.message(gifone + " " + giftwo + " " + gifthree)
 
                     ##Say
@@ -390,7 +427,7 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message("I'm chuntin")
 
-                    #elif cmd == "tags"
+                    # elif cmd == "tags"
 
                     ##List Mods
                     # List of Mods and Owner name in the current room you're in
@@ -398,7 +435,7 @@ class WomBot(ch.RoomManager):
                     #    room.delete_message(message)
                     #    room.message(", ".join(room.modnames + [room.ownername]))
 
-                    elif cmd in ["shoutout","shout"]:
+                    elif cmd in ["shoutout", "shout"]:
                         room.delete_message(message)
                         if args:
                             # print(args)
@@ -433,43 +470,19 @@ class WomBot(ch.RoomManager):
                                 + "! "
                                 + random.choice(shoutend)
                             )
-
-                    elif cmd == "tag":
-                        if room.get_level(self.user) > 0:
-                            room.delete_message(message)
-                            splitmsg = message.body.split(" ")
-                            if len(splitmsg) > 2:
-                                maybegif = splitmsg[1]
-                                maybekey = splitmsg[2]
-                                if maybegif.startswith("http") and maybegif.endswith(
-                                    ".gif"
-                                ):
-                                    print("might be gif")
-                                    if maybegif in allgif_set:
-                                        pass
-
-                                    else:
-                                        print("not in set")
-                                        allgif_set.add(maybegif)
-                                        with open(allgif_file, "a") as file:
-                                            file.write(maybegif + "\n")
-
-                                    if len(maybekey) < 20:
-                                        print(maybekey)
-                                        if maybekey not in commandlist:
-                                            if maybekey in d:
-                                                d[maybekey].append(maybegif)
-                                            else:
-                                                d[maybekey] = []
-                                                d[maybekey].append(maybegif)
-
-                                            with open(d_json_file, "w") as fp:
-                                                json.dump(d, fp)
+                    
 
                     else:
-                        if cmd in d:
+                        try:
+                            gifres = db.fetch_gif(cmd)
+                        except Exception as e:
+                            print(e)
+                        if gifres:
                             room.delete_message(message)
-                            room.message(random.choice(d[cmd]))
+                            print(gifres)
+                            room.message(random.choice(gifres))
+                        else:
+                            print('no result for gif search')
 
             else:
                 # very crude way to catch posted gifs and add them to allgif_set and allgif_file
