@@ -11,7 +11,7 @@ import time
 from collections import defaultdict
 import validators
 import search_google
-
+import logging as LOGGER
 
 import secrets
 import data_pics_wombat
@@ -22,6 +22,8 @@ import data_txt_fortunes as fortunes
 #import data_gif_hardcoded
 #import json
 import sqliteclass
+import acrcloud
+
 
 from os import environ
 db = sqliteclass.sqlite3class()
@@ -71,7 +73,6 @@ commandlist = [
     "capybara",
     "otter",
     "quokka",
-    "worm",
 ]
 
 helpmessage = (
@@ -91,16 +92,7 @@ shoutstart = [
     "out to the amazing ",
     "out to the unimitable",
 ]
-'''
-worms = [
-    "https://media.giphy.com/media/4ZAMJ2yArzMqCOlP03/giphy.gif",
-    "https://media.giphy.com/media/QYeX2ECQ1YpmZRzmfA/giphy.gif",
-    "https://media.giphy.com/media/Um8jaZlC11wmpAcyOw/giphy.gif",
-    "https://media.giphy.com/media/QicmUx0GygTvtv7MgG/giphy.gif",
-    "https://media.giphy.com/media/Mlu7VoB6nxC0z96pkd/giphy.gif",
-    "https://media.giphy.com/media/5HQ2n2gl6V9DA9bHkl/giphy.gif",
-]
-'''
+
 shoutend = ["😘", "❤️", "💙", "*h*", "<3"]
 
 gifhosts = ["https://c.tenor.com/", "https://media.giphy.com/"]
@@ -117,25 +109,7 @@ if not os.path.exists(allgif_file):
 else:
     with open(allgif_file) as file:
         allgif_set = set(line.strip() for line in file)
-'''
-d = defaultdict(list)
-d_json_file = os.path.join(basepath, "gif_tagged.json")
-if not os.path.exists(d_json_file):
-    with open(d_json_file, "w") as f:
-        pass
 
-else:
-    with open(d_json_file) as f:
-        d_str = json.loads(f.read())
-
-
-for k in d_str:
-    for value in d_str[k]:
-        d[k].append(value)
-
-
-print(d)
-'''
 print("init variables done")
 ##Dance moves!
 # kinda useless
@@ -167,12 +141,6 @@ class WomBot(ch.RoomManager):
 
     def on_disconnect(self, room):
         print("wombot.py, on_disconnect, Disconnected")
-        # time.sleep(5)
-        # print(room)
-        # room.reconnect()
-        # self.set_timeout(5, self.join_room(room.room_name)) # fails, maybe because other room can't tick
-        # trying to rejoin instantly after disconnect, this might backfire
-        self.join_room(room.room_name)
 
     def on_message(self, room, user, message):
         try:
@@ -239,9 +207,6 @@ class WomBot(ch.RoomManager):
                             .lower()
                         )
 
-                    elif cmd == "worm":
-                        room.delete_message(message)
-                        room.message(random.choice(worms))
 
                     elif cmd in [
                         "legalize",
@@ -253,15 +218,17 @@ class WomBot(ch.RoomManager):
                         "420",
                         "blazeit",
                         "blaze it",
+                        "blazin",
                     ]:
                         room.delete_message(message)
                         room.message(
-                            random.choice(tuple(bbb_set))
+                            random.choice(db.fetch_gif("bbb"))
+                            #random.choice(tuple(bbb_set))
                             + " "
                             + "https://media.giphy.com/media/VeGFReghsvt05wD341/giphy.gif"
                         )
 
-                    elif cmd in ["whatdoesthatmean", "benufo", "ufo"]:
+                    elif cmd in ["whatdoesthatmean", "benufo", "ufo", "bufo"]:
                         room.delete_message(message)
                         room.message(
                             "https://f001.backblazeb2.com/file/chuntongo/ben_ufo-whatdoesthatmean.mp3"
@@ -293,18 +260,15 @@ class WomBot(ch.RoomManager):
                         room.message(random.choice(data_pics_otter.pics))
 
                     elif cmd == "quokka":
+                        print('quokka')
                         room.delete_message(message)
                         room.message(random.choice(data_pics_quokka.pics))
 
-                    
-
                     elif cmd == "tags":
                         room.delete_message(message)
-                        dict_keys = d.keys()
-                        taglist = []
-                        for key in dict_keys:
-                            # print(key)
-                            taglist.append(key)
+                        taglist_all = db.cursor.execute("SELECT tag_name FROM tag_table")
+                        taglist = db.cursor.fetchall()
+                        
                         thelongeststring = (
                             "to tag a gif: !tag link-to-the-gif tagname \r"
                         )
@@ -313,6 +277,21 @@ class WomBot(ch.RoomManager):
                         print(thelongeststring)
 
                         self.pm.message(user, str(thelongeststring))
+
+                    elif cmd == "tag":
+                        if args:
+                            splitargs = args.split(" ")
+                            inurl = splitargs[0]
+                            intag = splitargs[1]
+                            db.tag(inurl,intag)
+                        
+                    elif cmd == "untag":
+                        if args:
+                            splitargs = args.split(" ")
+                            inurl = splitargs[0]
+                            intag = splitargs[1]
+                            db.untag(inurl,intag)
+
 
                     elif cmd in ["id1", "idch1"]:
                         room.delete_message(message)
@@ -358,6 +337,20 @@ class WomBot(ch.RoomManager):
                             room.message("ID DoYou: " + doyou_id_str)
                         else:
                             room.message("ID DoYou: No ID found, sorry")
+
+                    elif cmd == "idnoods":
+                        time,artists,title = acrcloud.get_id_noods()
+                        lesstime = time.split(":")
+                        hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
+                        googlequery = artists + " " + title
+                        res = search_google.search(googlequery)
+                        if res is not None:
+                            bc_link = res[0]["link"]
+                            room.message(
+                                "ID Noods: " + hoursmins + " - " + artists + " - " + title + " | maybe it's: " + bc_link
+                            )
+                        else:
+                            room.message("ID Noods: " + artists + " - " + title + " | no bandcamp found. ")
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)
@@ -427,7 +420,6 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message("I'm chuntin")
 
-                    # elif cmd == "tags"
 
                     ##List Mods
                     # List of Mods and Owner name in the current room you're in
