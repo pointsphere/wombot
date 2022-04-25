@@ -424,7 +424,7 @@ class WomBot(ch.RoomManager):
                     elif cmd in ["ntsweirdo"]:
                         room.delete_message(message)
                         weird_tweet = ntsweirdo.get_random_tweet()
-                        room.message(weird_tweet)
+                        room.message("anon1111: " + weird_tweet)
 
                     ##Say
                     # Make your bot say what you want
