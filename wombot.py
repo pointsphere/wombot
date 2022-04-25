@@ -23,6 +23,7 @@ import data_txt_fortunes as fortunes
 #import json
 import sqliteclass
 import acrcloud
+import ntsweirdo
 
 
 from os import environ
@@ -396,6 +397,12 @@ class WomBot(ch.RoomManager):
                         giftwo = random.choice(db.fetch_gif("bbb"))
                         gifthree = random.choice(db.fetch_gif("bbb"))
                         room.message(gifone + " " + giftwo + " " + gifthree)
+
+                    # get a recent tweet from the ntsweirdo twitter account
+                    elif cmd in ["ntsweirdo"]:
+                        room.delete_message(message)
+                        weird_tweet = ntsweirdo.get_random_tweet()
+                        room.message(weird_tweet)
 
                     ##Say
                     # Make your bot say what you want
