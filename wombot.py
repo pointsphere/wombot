@@ -98,9 +98,6 @@ shoutend = ["😘", "❤️", "💙", "*h*", "<3"]
 gifhosts = ["https://c.tenor.com/", "https://media.giphy.com/"]
 
 basepath = Path().absolute()
-bbb_file = os.path.join(basepath, "bbb.txt")
-with open(bbb_file) as file:
-    bbb_set = set(line.strip() for line in file)
 
 allgif_file = os.path.join(basepath, "allgif.txt")
 if not os.path.exists(allgif_file):
@@ -127,7 +124,6 @@ class WomBot(ch.RoomManager):
         self.set_font_face("0")
         self.set_font_size(10)
         self.enable_bg()
-        self.enable_recording()
         print("wombot on_init")
 
     ##Connecting
@@ -223,7 +219,6 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message(
                             random.choice(db.fetch_gif("bbb"))
-                            #random.choice(tuple(bbb_set))
                             + " "
                             + "https://media.giphy.com/media/VeGFReghsvt05wD341/giphy.gif"
                         )
@@ -308,9 +303,12 @@ class WomBot(ch.RoomManager):
                         res = search_google.search(googlequery)
                         if res is not None:
                             bc_link = res[0]["link"]
-                            room.message(
-                                "ID1: " + stripped + " | maybe it's: " + bc_link
-                            )
+                            if ("track" or "album") in bc_link:
+                                room.message(
+                                    "ID1: " + stripped + " | maybe it's: " + bc_link
+                                )
+                            else:
+                                room.message("ID1: " + stripped + " | no bandcamp found. ")
                         else:
                             room.message("ID1: " + stripped + " | no bandcamp found. ")
 
@@ -330,16 +328,26 @@ class WomBot(ch.RoomManager):
                                 room.message(
                                     "ID2: " + stripped + " | maybe it's: " + bc_link
                                 )
+                            else:
+                                room.message("ID2: " + stripped + " | no bandcamp found. ")
                         else:
                             room.message("ID2: " + stripped + " | no bandcamp found. ")
 
                     elif cmd == "iddy":
                         room.delete_message(message)
-                        doyou_id_str = get_id_doyou.get()
-                        if doyou_id_str != None:
-                            print(doyou_id_str)
-                            # room.message( doyou_id_str)
-                            room.message("ID DoYou: " + doyou_id_str)
+                        tracktime,trackartist,tracktitle = get_id_doyou.get()
+                        doyou_id_str = tracktime + ": " + trackartist + " - " + tracktitle
+                        if tracktitle != None:
+                            googlequery = trackartist + " " + tracktitle
+                            res = search_google.search(googlequery)
+                            if res is not None:
+                                bc_link = res[0]["link"]
+                                if ("track" or "album") in bc_link:
+                                    room.message("ID DoYou: " + doyou_id_str + " | maybe it's: " + bc_link)
+                                else:
+                                    print(doyou_id_str)
+                                    # room.message( doyou_id_str)
+                                    room.message("ID DoYou: " + doyou_id_str)
                         else:
                             room.message("ID DoYou: No ID found, sorry")
 
@@ -367,8 +375,6 @@ class WomBot(ch.RoomManager):
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)
-
-                        #gifone = random.choice(tuple(bbb_set))
                         gifone = random.choice(db.fetch_gif("bbb"))
                         room.message(gifone + " " + gifone + " " + gifone)
 
@@ -380,21 +386,12 @@ class WomBot(ch.RoomManager):
 
                     elif cmd == "b2b":
                         room.delete_message(message)
-                        '''
-                        gifone = random.choice(tuple(bbb_set))
-                        giftwo = random.choice(tuple(bbb_set))
-                        '''
                         gifone = random.choice(db.fetch_gif("bbb"))
                         giftwo = random.choice(db.fetch_gif("bbb"))
                         room.message(gifone + " " + giftwo + " " + gifone)
 
                     elif cmd in ["b2b2b", "bbbb","b3b"]:
                         room.delete_message(message)
-                        '''
-                        gifone = random.choice(tuple(bbb_set))
-                        giftwo = random.choice(tuple(bbb_set))
-                        gifthree = random.choice(tuple(bbb_set))
-                        '''
                         gifone = random.choice(db.fetch_gif("bbb"))
                         giftwo = random.choice(db.fetch_gif("bbb"))
                         gifthree = random.choice(db.fetch_gif("bbb"))
@@ -414,7 +411,7 @@ class WomBot(ch.RoomManager):
                             for arg in splitargs:
                                 if arg.startswith("@"):
                                     print(arg)
-                                    room.message("You are a bg " + (arg))
+                                    room.message("You are a bg, " + (arg) + "!")
 
                     elif cmd == "kiss":
                         room.delete_message(message)

@@ -6,15 +6,12 @@ def scran(q):
   url = "https://api.edamam.com/api/recipes/v2"
   params={
       "type": "public",
-      "app_id": "69b36727",
-      "app_key": "279e31ad74b2d652be7d7d0a5c3ffee0",
+      "app_id": secrets.edamam_app_id,
+      "app_key": secrets.edamam_app_key,
       "random": "true",
       "q": q
   }
-  '''headers = {
-    'Accept': 'application/json',
-    'Authorization': 'Bearer 1b47aee2dba1dd811452e2eae5bfb5a5' 
-  }'''
+  
 
   response = requests.request("GET", url, params=params)
   print(response.url)

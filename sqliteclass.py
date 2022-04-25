@@ -12,6 +12,7 @@ class sqlite3class:
     def query_gif(self, inurl):
         # inurl: url
         # returns url ID
+        print('query_gif', inurl)
         self.cursor.execute("SELECT * FROM object_table WHERE object_name=? ", [inurl])
         result = self.cursor.fetchone()
         if result:
@@ -65,10 +66,13 @@ class sqlite3class:
         return result_tag_id
 
     def tag(self, inurl, intag):
+        print('tag')
         urlid = self.query_gif(inurl)
+        print("tag urlid",urlid)
         if not urlid:
             urlid = self.insert(inurl)
         tagid = self.query_tag(intag)
+        print("tag tagid",tagid)
         if not tagid:
             tagid = self.create_tag(intag)
         self.map_tag_to_gif(tagid, urlid)
