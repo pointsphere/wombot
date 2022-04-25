@@ -333,7 +333,7 @@ class WomBot(ch.RoomManager):
                         else:
                             room.message("ID2: " + stripped + " | no bandcamp found. ")
 
-                    elif cmd == "iddy":
+                    elif cmd in ["iddy","iddoyou"]:
                         room.delete_message(message)
                         tracktime,trackartist,tracktitle = get_id_doyou.get()
                         doyou_id_str = tracktime + ": " + trackartist + " - " + tracktitle
@@ -372,6 +372,28 @@ class WomBot(ch.RoomManager):
                                 room.message("ID Noods: " + hoursmins + " - " + artists + " - " + title + " | no bandcamp found. ")
                         else:
                             room.message("ID Noods: " + hoursmins + " - " + artists + " - " + title + " | no bandcamp found. ")
+                    
+                    elif cmd in ["idpalanga","palanga"]:
+                        room.delete_message(message)
+                        print('palanga')
+                        time,artists,title = acrcloud.get_id_noods()
+                        print(time,artists,title)
+                        lesstime = time.split(":")
+                        hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
+                        googlequery = artists + " " + title
+                        res = search_google.search(googlequery)
+                        print(res)
+                        if res is not None:
+                            bc_link = res[0]["link"]
+                            print(bc_link)
+                            if ("track" or "album") in bc_link:
+                                room.message(
+                                    "ID Palanga: " + hoursmins + " - " + artists + " - " + title + " | maybe it's: " + bc_link
+                                )
+                            else:
+                                room.message("ID Palanga: " + hoursmins + " - " + artists + " - " + title + " | no bandcamp found. ")
+                        else:
+                            room.message("ID Palanga: " + hoursmins + " - " + artists + " - " + title + " | no bandcamp found. ")
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)

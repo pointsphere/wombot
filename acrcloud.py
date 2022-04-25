@@ -3,7 +3,7 @@ import secrets
 
 def get_id_noods():
   #url = "https://api-v2.acrcloud.com/api/buckets?region=eu-west-1"
-  url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/280334/results?type=last"
+  url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/306866/results?type=last"
   payload={}
   headers = {
     'Accept': 'application/json',
