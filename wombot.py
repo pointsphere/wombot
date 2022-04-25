@@ -228,24 +228,13 @@ class WomBot(ch.RoomManager):
                             + "https://media.giphy.com/media/VeGFReghsvt05wD341/giphy.gif"
                         )
 
-                    elif cmd in ["whatdoesthatmean", "benufo", "ufo", "bufo"]:
+                    elif cmd in ["whatdoesthatmean", "benufo", "bufo"]:
                         room.delete_message(message)
                         room.message(
                             "https://f001.backblazeb2.com/file/chuntongo/ben_ufo-whatdoesthatmean.mp3"
                         )
 
-                    elif cmd in [
-                        "trashcan",
-                        "trash",
-                        "bins",
-                        "cans",
-                        "bin",
-                        "trashcans",
-                    ]:
-                        room.delete_message(message)
-                        room.message(
-                            "https://c.tenor.com/zwrFrOZn9HUAAAAd/bin-can-can-dancing-trash.gif"
-                        )
+                    
 
                     elif cmd == "wombat":
                         room.delete_message(message)
@@ -279,11 +268,26 @@ class WomBot(ch.RoomManager):
                         self.pm.message(user, str(thelongeststring))
 
                     elif cmd == "tag":
+                        room.delete_message(message)
                         if args:
+                            args = args.replace(","," ")
+                            print('fullargs: ',args)
                             splitargs = args.split(" ")
+                            print(splitargs)
                             inurl = splitargs[0]
-                            intag = splitargs[1]
-                            db.tag(inurl,intag)
+                            print(inurl)
+                            intags = splitargs[1:]
+                            print(intags)
+                            if not inurl.startswith("http"):
+                                print('1st arg must be http')
+                                room.message("!tag url-to-gif tag1 tag2")
+                            else:
+                                print('taggem')
+                                for intag in intags:
+                                    print(intag)
+                                    intag = intag.strip()
+                                    print(intag)
+                                    db.tag(inurl,intag)
                         
                     elif cmd == "untag":
                         if args:
@@ -322,9 +326,10 @@ class WomBot(ch.RoomManager):
                         res = search_google.search(googlequery)
                         if res is not None:
                             bc_link = res[0]["link"]
-                            room.message(
-                                "ID2: " + stripped + " | maybe it's: " + bc_link
-                            )
+                            if ("track" or "album") in bc_link:
+                                room.message(
+                                    "ID2: " + stripped + " | maybe it's: " + bc_link
+                                )
                         else:
                             room.message("ID2: " + stripped + " | no bandcamp found. ")
 
@@ -339,18 +344,26 @@ class WomBot(ch.RoomManager):
                             room.message("ID DoYou: No ID found, sorry")
 
                     elif cmd == "idnoods":
+                        room.delete_message(message)
+                        print('nooooods')
                         time,artists,title = acrcloud.get_id_noods()
+                        print(time,artists,title)
                         lesstime = time.split(":")
                         hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
                         googlequery = artists + " " + title
                         res = search_google.search(googlequery)
+                        print(res)
                         if res is not None:
                             bc_link = res[0]["link"]
-                            room.message(
-                                "ID Noods: " + hoursmins + " - " + artists + " - " + title + " | maybe it's: " + bc_link
-                            )
+                            print(bc_link)
+                            if ("track" or "album") in bc_link:
+                                room.message(
+                                    "ID Noods: " + hoursmins + " - " + artists + " - " + title + " | maybe it's: " + bc_link
+                                )
+                            else:
+                                room.message("ID Noods: " + hoursmins + " - " + artists + " - " + title + " | no bandcamp found. ")
                         else:
-                            room.message("ID Noods: " + artists + " - " + title + " | no bandcamp found. ")
+                            room.message("ID Noods: " + hoursmins + " - " + artists + " - " + title + " | no bandcamp found. ")
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)

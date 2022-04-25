@@ -11,7 +11,10 @@ def get_id_noods():
   }
 
   response = requests.request("GET", url, headers=headers, data=payload)
+  print(response.text)
   jsonresp = response.json()
+
+  print(jsonresp)
   time = jsonresp["data"][0]["metadata"]["timestamp_utc"]
   title = (jsonresp["data"][0]["metadata"]["music"][0]['title'])
   artists = ''
