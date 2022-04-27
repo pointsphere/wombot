@@ -3,7 +3,12 @@ import secrets
 
 def get_id_noods():
   #url = "https://api-v2.acrcloud.com/api/buckets?region=eu-west-1"
-  url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/306866/results?type=last"
+
+  # via broadcast monitoring, does not include some IDs for some reason
+  #url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/306866/results?type=last"
+
+  # via Broadcast Monitoring Custom Strea
+  url = "https://api-v2.acrcloud.com/api/bm-cs-projects/14794/streams/s-o7qMI47t/results?type=last"
   payload={}
   headers = {
     'Accept': 'application/json',
