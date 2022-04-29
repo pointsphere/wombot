@@ -269,22 +269,14 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         if args:
                             args = args.replace(",", " ")
-                            print("fullargs: ", args)
                             splitargs = args.split(" ")
-                            print(splitargs)
                             inurl = splitargs[0]
-                            print(inurl)
                             intags = splitargs[1:]
-                            print(intags)
                             if not inurl.startswith("http"):
-                                print("1st arg must be http")
-                                room.message("!tag url-to-gif tag1 tag2")
+                                room.message("!tag url-to-gif tag1 tag2 tag3")
                             else:
-                                print("taggem")
                                 for intag in intags:
-                                    print(intag)
                                     intag = intag.strip()
-                                    print(intag)
                                     db.tag(inurl, intag)
 
                     elif cmd == "untag":
@@ -343,7 +335,7 @@ class WomBot(ch.RoomManager):
                                 "ID NTS2: " + stripped + " | no bandcamp found. "
                             )
 
-                    elif cmd in ["iddy", "iddoyou", "doyou"]:
+                    elif cmd in ["iddy", "iddoyou"]:
                         room.delete_message(message)
                         tracktime, trackartist, tracktitle = get_id_doyou.get()
                         doyou_id_str = (
@@ -372,16 +364,26 @@ class WomBot(ch.RoomManager):
                         else:
                             room.message("ID DoYou: No ID found, sorry")
 
-                    elif cmd == "idnoods":
+                    elif cmd in ["idnoods"]:
                         room.delete_message(message)
-                        print("nooooods")
                         time, artists, title = acrcloud.get_id_noods()
                         print(time, artists, title)
-                        lesstime = time.split(":")
+                        tz = pytz.timezone("UTC")
+                        naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+                        utc_time = naive_time.replace(tzinfo=pytz.UTC)
+                        london_tz = pytz.timezone("Europe/London")
+
+                        london_time = utc_time.astimezone(london_tz)
+                        print(london_time)
+                        string_time = str(london_time)
+                        print(string_time)
+                        splittime = string_time.split(" ")
+                        lesstime = splittime[1].split(":")
+                        print(lesstime)
                         hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
+                        print(hoursmins)
                         googlequery = artists + " " + title
                         res = search_google.search(googlequery)
-                        print(res)
                         if res is not None:
                             bc_link = res[0]["link"]
                             print(bc_link)
@@ -417,7 +419,7 @@ class WomBot(ch.RoomManager):
                                 + " | no bandcamp found. "
                             )
 
-                    elif cmd in ["idpalanga", "palanga"]:
+                    elif cmd in ["idpalanga"]:
                         room.delete_message(message)
                         print("palanga")
                         time, artists, title = acrcloud.get_id_palanga()
@@ -429,9 +431,9 @@ class WomBot(ch.RoomManager):
                         london_tz = pytz.timezone("Europe/London")
                         london_time = utc_time.astimezone(london_tz)
                         string_time = str(london_time)
-                        lesstime = stringtime.split(" ")[1].split(":")
+                        lesstime = string_time.split(" ")[1].split(":")
                         hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
-
+                        print(hoursmins)
                         googlequery = artists + " " + title
                         res = search_google.search(googlequery)
                         print(res)
