@@ -1,6 +1,7 @@
 import sqlite3
 import logging as LOGGER
 
+
 class sqlite3class:
     def __init__(self):
         self.conn = sqlite3.connect("pythonsqlite.db")
@@ -12,7 +13,7 @@ class sqlite3class:
     def query_gif(self, inurl):
         # inurl: url
         # returns url ID
-        print('query_gif', inurl)
+        print("query_gif", inurl)
         self.cursor.execute("SELECT * FROM object_table WHERE object_name=? ", [inurl])
         result = self.cursor.fetchone()
         if result:
@@ -66,13 +67,13 @@ class sqlite3class:
         return result_tag_id
 
     def tag(self, inurl, intag):
-        print('tag')
+        print("tag")
         urlid = self.query_gif(inurl)
-        print("tag urlid",urlid)
+        print("tag urlid", urlid)
         if not urlid:
             urlid = self.insert(inurl)
         tagid = self.query_tag(intag)
-        print("tag tagid",tagid)
+        print("tag tagid", tagid)
         if not tagid:
             tagid = self.create_tag(intag)
         self.map_tag_to_gif(tagid, urlid)
@@ -80,23 +81,25 @@ class sqlite3class:
     def untag(self, inurl, intag):
         urlid = self.query_gif(inurl)
         tagid = self.query_tag(intag)
-        if (urlid and tagid):
-            self.cursor.execute("DELETE FROM object_tag_mapping  WHERE object_reference = ? AND tag_reference = ?", (urlid, tagid))
+        if urlid and tagid:
+            self.cursor.execute(
+                "DELETE FROM object_tag_mapping  WHERE object_reference = ? AND tag_reference = ?",
+                (urlid, tagid),
+            )
             self.conn.commit()
-            
+
         test_tag_has_url = self.fetch_gif(intag)
-        
+
         if not test_tag_has_url:
             self.cursor.execute("DELETE FROM tag_table WHERE tag_name = ?", (intag,))
             self.conn.commit()
-        
 
 
 if __name__ == "__main__":
     db = sqlite3class()
     query_in = input("enter search term: ")
     url_in = input("enter url: ")
-    db.untag("https://media.giphy.com/media/xuFza8ogutelGYr00k/giphy.gif","woi")
+    db.untag("https://media.giphy.com/media/xuFza8ogutelGYr00k/giphy.gif", "woi")
 
     result_tag_id = db.fetch_gif(query_in)
     LOGGER.error("result_tag_id", result_tag_id)
