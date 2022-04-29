@@ -25,7 +25,8 @@ import data_txt_fortunes as fortunes
 import sqliteclass
 import acrcloud
 import ntsweirdo
-
+from datetime import datetime, date
+import pytz
 
 from os import environ
 
@@ -419,10 +420,18 @@ class WomBot(ch.RoomManager):
                     elif cmd in ["idpalanga", "palanga"]:
                         room.delete_message(message)
                         print("palanga")
-                        time, artists, title = acrcloud.get_id_noods()
+                        time, artists, title = acrcloud.get_id_palanga()
                         print(time, artists, title)
-                        lesstime = time.split(" ")[1].split(":")
+
+                        tz = pytz.timezone("UTC")
+                        naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+                        utc_time = naive_time.replace(tzinfo=pytz.UTC)
+                        london_tz = pytz.timezone("Europe/London")
+                        london_time = utc_time.astimezone(london_tz)
+                        string_time = str(london_time)
+                        lesstime = stringtime.split(" ")[1].split(":")
                         hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
+
                         googlequery = artists + " " + title
                         res = search_google.search(googlequery)
                         print(res)
