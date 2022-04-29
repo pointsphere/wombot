@@ -338,9 +338,22 @@ class WomBot(ch.RoomManager):
                     elif cmd in ["iddy", "iddoyou"]:
                         room.delete_message(message)
                         tracktime, trackartist, tracktitle = get_id_doyou.get()
+
+                        # sophisticated UTC to BST conversion
+                        splittime = tracktime.split(":")
+                        hour = int(splittime[0])
+                        if hour < 23:
+                            newhour = hour + 1
+                        else:
+                            newhour = "00"
+                        newtime = newhour + ":" + splittime[1]
+
                         doyou_id_str = (
                             tracktime + " - " + trackartist + " - " + tracktitle
                         )
+                        
+                        
+
                         if tracktitle != None:
                             googlequery = trackartist + " " + tracktitle
                             res = search_google.search(googlequery)
@@ -348,7 +361,7 @@ class WomBot(ch.RoomManager):
                                 bc_link = res[0]["link"]
                                 if ("track" or "album") in bc_link:
                                     room.message(
-                                        "ID DoYou:"
+                                        "ID DoYou: "
                                         + doyou_id_str
                                         + " | maybe it's: "
                                         + bc_link
