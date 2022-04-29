@@ -4,7 +4,7 @@ import secrets
 
 def get_id_noods():
     # via broadcast monitoring, does not include some IDs for some reason
-    url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/306866/results?type=last"
+    url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/280334/results?type=last"
 
     # via Broadcast Monitoring Custom Stream
     # url = "https://api-v2.acrcloud.com/api/bm-cs-projects/14794/streams/s-o7qMI47t/results?type=last"
@@ -31,7 +31,7 @@ def get_id_noods():
 
 def get_id_palanga():
     # via broadcast monitoring, does not include some IDs for some reason
-    #url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/306866/results?type=last"
+    # url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/306866/results?type=last"
 
     # via Broadcast Monitoring Custom Stream
     # https://stream.palanga.live:8443/palanga128.mp3
