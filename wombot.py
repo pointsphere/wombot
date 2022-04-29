@@ -27,8 +27,10 @@ import acrcloud
 import ntsweirdo
 from datetime import datetime, date
 import pytz
-
+import edamam
 from os import environ
+
+
 
 db = sqliteclass.sqlite3class()
 
@@ -267,24 +269,27 @@ class WomBot(ch.RoomManager):
 
                     elif cmd == "tag":
                         room.delete_message(message)
-                        if args:
-                            args = args.replace(",", " ")
-                            splitargs = args.split(" ")
-                            inurl = splitargs[0]
-                            intags = splitargs[1:]
-                            if not inurl.startswith("http"):
-                                room.message("!tag url-to-gif tag1 tag2 tag3")
-                            else:
-                                for intag in intags:
-                                    intag = intag.strip()
-                                    db.tag(inurl, intag)
+                        if room.get_level(user) > 0:
+                            if args:
+                                args = args.replace(",", " ")
+                                splitargs = args.split(" ")
+                                inurl = splitargs[0]
+                                intags = splitargs[1:]
+                                if not inurl.startswith("http"):
+                                    room.message("!tag url-to-gif tag1 tag2 tag3")
+                                else:
+                                    for intag in intags:
+                                        intag = intag.strip()
+                                        db.tag(inurl, intag)
 
                     elif cmd == "untag":
-                        if args:
-                            splitargs = args.split(" ")
-                            inurl = splitargs[0]
-                            intag = splitargs[1]
-                            db.untag(inurl, intag)
+                        room.delete_message(message)
+                        if room.get_level(user) > 0:
+                            if args:
+                                splitargs = args.split(" ")
+                                inurl = splitargs[0]
+                                intag = splitargs[1]
+                                db.untag(inurl, intag)
 
                     elif cmd in ["id1", "idch1", "idnts1", "nts1"]:
                         room.delete_message(message)
@@ -530,13 +535,18 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message("I'm chuntin")
 
+                    elif cmd == "scran":
+                        room.delete_message(message)
+                        title,url = edamam.scran("vegetarian")
+                        room.message("hungry? how about: " + title + " | " + url)
+
                     ##List Mods
                     # List of Mods and Owner name in the current room you're in
                     # elif cmd == "mods":
                     #    room.delete_message(message)
                     #    room.message(", ".join(room.modnames + [room.ownername]))
 
-                    elif cmd in ["shoutout", "shout"]:
+                    elif cmd in ["shoutout", "shout", "out"]:
                         room.delete_message(message)
                         if args:
                             # print(args)
@@ -589,8 +599,7 @@ class WomBot(ch.RoomManager):
                 splitmsg = message.body.split(" ")
                 for word in splitmsg:
                     if (
-                        any(word.startswith(host) for host in gifhosts)
-                        and word.endswith(".gif")
+                        (word.endswith(".gif") or word.endswith(".gifv"))
                         and (len(word) < 75)
                     ):
                         print("might be gif")

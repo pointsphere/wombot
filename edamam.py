@@ -19,11 +19,12 @@ def scran(q):
     #print(response.text)
     jsonresp = response.json()
     recipe = jsonresp
-    print(jsonresp["hits"][0])
-
+    #print(jsonresp)
+    recipe_name = (jsonresp["hits"][0]['recipe']['label'])
+    recipe_url = (jsonresp["hits"][0]['recipe']['url'])
     # time = jsonresp["data"][0]["metadata"]["timestamp_utc"]
     # title = (jsonresp["data"][0]["metadata"]["music"][0]['title'])
-    return recipe
+    return recipe_name,recipe_url
 
 
 if __name__ == "__main__":
