@@ -535,6 +535,15 @@ class WomBot(ch.RoomManager):
                         room.delete_message(message)
                         room.message("I'm chuntin")
 
+                    elif cmd in ["heart", "hearts"]:
+                        room.delete_message(message)
+                        a = random.randint(1,10)
+                        heart = ""
+                        for i in range(0,a):
+                            heart = heart + "*h* "
+
+                        room.message(heart)
+
                     elif cmd == "scran":
                         room.delete_message(message)
                         if args:
