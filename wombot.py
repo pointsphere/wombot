@@ -379,7 +379,7 @@ class WomBot(ch.RoomManager):
                         print('palanga')
                         time,artists,title = acrcloud.get_id_noods()
                         print(time,artists,title)
-                        lesstime = time.split(":")
+                        lesstime = time.split(" ")[1].split(":")
                         hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
                         googlequery = artists + " " + title
                         res = search_google.search(googlequery)
