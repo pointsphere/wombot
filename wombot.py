@@ -77,6 +77,7 @@ commandlist = [
     "capybara",
     "otter",
     "quokka",
+    "ntsweirdo"
 ]
 
 helpmessage = (
