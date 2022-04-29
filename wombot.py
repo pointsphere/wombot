@@ -338,22 +338,10 @@ class WomBot(ch.RoomManager):
                     elif cmd in ["iddy", "iddoyou"]:
                         room.delete_message(message)
                         tracktime, trackartist, tracktitle = get_id_doyou.get()
-
-                        # sophisticated UTC to BST conversion
-                        splittime = tracktime.split(":")
-                        hour = int(splittime[0])
-                        if hour < 23:
-                            newhour = hour + 1
-                        else:
-                            newhour = "00"
-                        newtime = newhour + ":" + splittime[1]
-
                         doyou_id_str = (
                             tracktime + " - " + trackartist + " - " + tracktitle
                         )
-                        
-                        
-
+                        #print('tracktime ',tracktime)
                         if tracktitle != None:
                             googlequery = trackartist + " " + tracktitle
                             res = search_google.search(googlequery)
@@ -380,21 +368,15 @@ class WomBot(ch.RoomManager):
                     elif cmd in ["idnoods"]:
                         room.delete_message(message)
                         time, artists, title = acrcloud.get_id_noods()
-                        print(time, artists, title)
                         tz = pytz.timezone("UTC")
                         naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
                         utc_time = naive_time.replace(tzinfo=pytz.UTC)
                         london_tz = pytz.timezone("Europe/London")
-
                         london_time = utc_time.astimezone(london_tz)
-                        print(london_time)
                         string_time = str(london_time)
-                        print(string_time)
                         splittime = string_time.split(" ")
                         lesstime = splittime[1].split(":")
-                        print(lesstime)
                         hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
-                        print(hoursmins)
                         googlequery = artists + " " + title
                         res = search_google.search(googlequery)
                         if res is not None:
