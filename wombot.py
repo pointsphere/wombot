@@ -537,7 +537,11 @@ class WomBot(ch.RoomManager):
 
                     elif cmd == "scran":
                         room.delete_message(message)
-                        title,url = edamam.scran("vegetarian")
+                        if args:
+                            q = args
+                        else:
+                            q = "vegetarian"
+                        title,url = edamam.scran(q)
                         room.message("hungry? how about: " + title + " | " + url)
 
                     ##List Mods
