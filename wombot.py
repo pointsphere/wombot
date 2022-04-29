@@ -1,4 +1,4 @@
-import get_id_nts
+ import get_id_nts
 import get_id_doyou
 import ch
 import random

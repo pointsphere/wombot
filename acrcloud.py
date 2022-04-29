@@ -1,5 +1,8 @@
 import requests
 import secrets
+from datetime import datetime,date
+import pytz
+
 
 def get_id_noods():
   #url = "https://api-v2.acrcloud.com/api/buckets?region=eu-west-1"
@@ -16,11 +19,17 @@ def get_id_noods():
   }
 
   response = requests.request("GET", url, headers=headers, data=payload)
-  print(response.text)
+  #print(response.text)
   jsonresp = response.json()
-
-  print(jsonresp)
+  #print(jsonresp)
   time = jsonresp["data"][0]["metadata"]["timestamp_utc"]
+  #print(time)
+  tz = pytz.timezone('UTC')
+  naive_time = datetime.strptime(time,"%Y-%m-%d %H:%M:%S")
+  utc_time = naive_time.replace(tzinfo=pytz.UTC)
+  london_tz = pytz.timezone('Europe/London')
+  london_time = utc_time.astimezone(london_tz)
+  string_time = str(london_time)
   title = (jsonresp["data"][0]["metadata"]["music"][0]['title'])
   artists = ''
   for item in jsonresp["data"][0]["metadata"]["music"][0]['artists']:
@@ -28,8 +37,8 @@ def get_id_noods():
       artists = str(item.get('name'))
     else:
       artists = artists + " / " + str(item.get('name'))
-    hours = time.split(" ")[1]
-    return hours,artists,title
+    
+    return string_time,artists,title
 
 if __name__ == "__main__":
     jsonresp = get_id_noods()
