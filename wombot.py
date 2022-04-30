@@ -544,7 +544,7 @@ class WomBot(ch.RoomManager):
 
                         room.message(heart)
 
-                    elif cmd == "scran":
+                    elif cmd in ["scran","recipe","food","hungry"]:
                         room.delete_message(message)
                         if args:
                             q = args
