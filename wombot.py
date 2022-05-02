@@ -30,6 +30,11 @@ import pytz
 
 from os import environ
 
+import shazam_api.shazam
+import re
+import json
+
+
 db = sqliteclass.sqlite3class()
 
 # environ['VAR_NAME']
@@ -46,6 +51,8 @@ giphy_key = secrets.giphy_key
 chatango_user = secrets.chatango_user
 chatango_pass = secrets.chatango_pass
 tenor_key = secrets.tenor_key
+
+shazam_api_key = secrets.shazam_api_key
 
 myrooms = []
 myrooms.append(environ["wombotmainroom"])
@@ -472,6 +479,54 @@ class WomBot(ch.RoomManager):
                                 + title
                                 + " | no bandcamp found. "
                             )
+
+                    elif cmd.startswith('raid'):
+
+                        api = shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
+                        station_query = cmd.replace('raid', '').strip()
+
+                        msg = ''
+
+                        response = urlreq.urlopen('https://radioactivity.directory/api/')
+
+                        if response.code != 200:
+                            room.message('RAID Error: ' + str(response.code))
+                        else:
+                            html = response.read().decode('ISO-8859-1')
+
+                            ra_stations = json.loads(re.split('<[/]{0,1}script.*?>', html)[1])
+
+                            ra_station_names = list(ra_stations.keys())
+
+                            # if the provided station name is in the list of stations
+                            if station_query in ra_station_names:
+                                station_name = station_query
+                            # try to guess which station is meant
+                            else:
+                                station_name = [station for station in ra_station_names if station_query in station]
+
+                                # if two station have the same distance, choose the first one
+                                if isinstance(station_name,list):
+                                    station_name = station_name[0]
+
+                            id_station = ra_stations[station_name]
+
+                            # for all stations urls for the given station, run the shazam api and append results to the message
+                            for stream in id_station['stream_url']:
+                                stream_name = stream[0]
+                                if stream_name == 'station':
+                                    stream_name = ''
+                                stream_url = stream[1]
+
+                                # shazam it
+                                try:
+                                    shazam_result = api.detect(stream_url, rec_seconds=4)
+                                    result_dict = json.loads(shazam_result.content)
+                                    msg += 'ID ' + station_name + " " + stream_name + ': ' + result_dict['track']['subtitle'] + ' - ' + result_dict['track']['title'] + '\n'
+                                except Exception as e:
+                                    msg += 'ID ' + station_name + " " + stream_name + ': Track could not be idenitfied ' + str(e) + '\n'
+
+                            room.message(msg)
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)
