@@ -293,7 +293,56 @@ class WomBot(ch.RoomManager):
 
                     elif cmd in ["id1", "idch1", "idnts1", "nts1"]:
                         room.delete_message(message)
-                        room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/1')
+                        #room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/1')
+                        time, artists, title = acrcloud.get_id_nts_one()
+                        print(time, artists, title)
+
+                        tz = pytz.timezone("UTC")
+                        naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+                        utc_time = naive_time.replace(tzinfo=pytz.UTC)
+                        london_tz = pytz.timezone("Europe/London")
+                        london_time = utc_time.astimezone(london_tz)
+                        string_time = str(london_time)
+                        lesstime = string_time.split(" ")[1].split(":")
+                        hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
+                        print(hoursmins)
+                        googlequery = artists + " " + title
+                        res = search_google.search(googlequery)
+                        print(res)
+                        if res is not None:
+                            bc_link = res[0]["link"]
+                            print(bc_link)
+                            if ("track" or "album") in bc_link:
+                                room.message(
+                                    "ID NTS1: "
+                                    + hoursmins
+                                    + " - "
+                                    + artists
+                                    + " - "
+                                    + title
+                                    + " | maybe it's: "
+                                    + bc_link
+                                )
+                            else:
+                                room.message(
+                                    "ID NTS1: "
+                                    + hoursmins
+                                    + " - "
+                                    + artists
+                                    + " - "
+                                    + title
+                                    + " | no bandcamp found. "
+                                )
+                        else:
+                            room.message(
+                                "ID NTS1: "
+                                + hoursmins
+                                + " - "
+                                + artists
+                                + " - "
+                                + title
+                                + " | no bandcamp found. "
+                            )
                         '''
                         trackid_unstripped = get_id_nts.run("1")
                         trackid_split = trackid_unstripped.split("\n")
@@ -320,7 +369,55 @@ class WomBot(ch.RoomManager):
 
                     elif cmd in ["id2", "idch2", "idnts2", "nts2"]:
                         room.delete_message(message)
-                        room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/2')
+                        #room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/2')
+                        time, artists, title = acrcloud.get_id_nts_two()
+                        tz = pytz.timezone("UTC")
+                        naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+                        utc_time = naive_time.replace(tzinfo=pytz.UTC)
+                        london_tz = pytz.timezone("Europe/London")
+                        london_time = utc_time.astimezone(london_tz)
+                        string_time = str(london_time)
+                        splittime = string_time.split(" ")
+                        lesstime = splittime[1].split(":")
+                        hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
+                        googlequery = artists + " " + title
+                        res = search_google.search(googlequery)
+                        if res is not None:
+                            bc_link = res[0]["link"]
+                            print(bc_link)
+                            if ("track" or "album") in bc_link:
+                                room.message(
+                                    "ID NTS2: "
+                                    + hoursmins
+                                    + " - "
+                                    + artists
+                                    + " - "
+                                    + title
+                                    + " | maybe it's: "
+                                    + bc_link
+                                )
+                            else:
+                                room.message(
+                                    "ID NTS2: "
+                                    + hoursmins
+                                    + " - "
+                                    + artists
+                                    + " - "
+                                    + title
+                                    + " | no bandcamp found. "
+                                )
+                        else:
+                            room.message(
+                                "ID NTS2: "
+                                + hoursmins
+                                + " - "
+                                + artists
+                                + " - "
+                                + title
+                                + " | no bandcamp found. "
+                            )
+                            
+
                         '''
                         trackid_unstripped = get_id_nts.run("2")
                         trackid_split = trackid_unstripped.split("\n")
@@ -376,8 +473,8 @@ class WomBot(ch.RoomManager):
                             room.message("ID DoYou: No ID found, sorry")
 
                     elif cmd in ["idnoods"]:
-                        room.delete_message(message)
-                        room.message('!id maintenance. please visit https://noodsradio.com/')
+                        #room.delete_message(message)
+                        #room.message('sorry, no noods id right now')
                         '''
                         time, artists, title = acrcloud.get_id_noods()
                         tz = pytz.timezone("UTC")
@@ -428,8 +525,8 @@ class WomBot(ch.RoomManager):
                             '''
 
                     elif cmd in ["idpalanga"]:
-                        room.delete_message(message)
-                        room.message('!id maintenance. please visit https://palanga.live/')
+                        #room.delete_message(message)
+                        #room.message('!id maintenance. please visit https://palanga.live/')
 
                         '''
 
