@@ -293,6 +293,8 @@ class WomBot(ch.RoomManager):
 
                     elif cmd in ["id1", "idch1", "idnts1", "nts1"]:
                         room.delete_message(message)
+                        room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/1')
+                        '''
                         trackid_unstripped = get_id_nts.run("1")
                         trackid_split = trackid_unstripped.split("\n")
                         stripped = trackid_unstripped.replace("\n", " - ").replace(
@@ -314,10 +316,12 @@ class WomBot(ch.RoomManager):
                             room.message(
                                 "ID NTS1: " + stripped + " | no bandcamp found. "
                             )
+                            '''
 
                     elif cmd in ["id2", "idch2", "idnts2", "nts2"]:
                         room.delete_message(message)
-
+                        room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/2')
+                        '''
                         trackid_unstripped = get_id_nts.run("2")
                         trackid_split = trackid_unstripped.split("\n")
                         stripped = trackid_unstripped.replace("\n", " - ").replace(
@@ -339,6 +343,7 @@ class WomBot(ch.RoomManager):
                             room.message(
                                 "ID NTS2: " + stripped + " | no bandcamp found. "
                             )
+                        '''
 
                     elif cmd in ["iddy", "iddoyou"]:
                         room.delete_message(message)
@@ -372,6 +377,8 @@ class WomBot(ch.RoomManager):
 
                     elif cmd in ["idnoods"]:
                         room.delete_message(message)
+                        room.message('!id maintenance. please visit https://noodsradio.com/')
+                        '''
                         time, artists, title = acrcloud.get_id_noods()
                         tz = pytz.timezone("UTC")
                         naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
@@ -418,9 +425,14 @@ class WomBot(ch.RoomManager):
                                 + title
                                 + " | no bandcamp found. "
                             )
+                            '''
 
                     elif cmd in ["idpalanga"]:
                         room.delete_message(message)
+                        room.message('!id maintenance. please visit https://palanga.live/')
+
+                        '''
+
                         print("palanga")
                         time, artists, title = acrcloud.get_id_palanga()
                         print(time, artists, title)
@@ -471,6 +483,7 @@ class WomBot(ch.RoomManager):
                                 + title
                                 + " | no bandcamp found. "
                             )
+                            '''
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)
