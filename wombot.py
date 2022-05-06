@@ -450,6 +450,7 @@ class WomBot(ch.RoomManager):
                         )
                         #print('tracktime ',tracktime)
                         if tracktitle != None:
+                            "print we have a tracktitle"
                             googlequery = trackartist + " " + tracktitle
                             res = search_google.search(googlequery)
                             if res is not None:
@@ -470,6 +471,7 @@ class WomBot(ch.RoomManager):
                                         + " | no bandcamp found. "
                                     )
                         else:
+                            print('no id from doyou')
                             room.message("ID DoYou: No ID found, sorry")
 
                     elif cmd in ["idnoods"]:

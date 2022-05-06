@@ -19,6 +19,8 @@ def get():
     if tracktime and trackartist and tracktitle:
         # sophisticated UTC to BST conversion
         print(tracktime)
+        print(trackartist)
+        print(tracktitle)
         splittime = tracktime.text.split(":")
         hour = int(splittime[0])
         if hour < 23:
@@ -31,7 +33,7 @@ def get():
         newtime = str(newhour) + ":" + splittime[1]
 
 
-
+        print(newtime,trackartist.text,tracktitle.text)
         return newtime, trackartist.text, tracktitle.text
     else:
         print("no result")
