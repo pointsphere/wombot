@@ -1,11 +1,12 @@
 # secrets
+allgif.txt
 secrets.py
 nts_login.py
 get_id_nts.py
 ntscookie/
 .DS_Store
 google_cse_api_keys.txt
-
+pythonsqlite.db
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
