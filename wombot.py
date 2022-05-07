@@ -478,6 +478,125 @@ class WomBot(ch.RoomManager):
                             print("no id from doyou")
                             room.message("ID DoYou: No ID found, sorry")
 
+                    elif cmd in ["bollwerk","radiobollwerk"]:
+                        room.delete_message(message)
+                        # code if acrcloud is used
+                        """
+                        time, artists, title = acrcloud.get_id_noods()
+                        tz = pytz.timezone("UTC")
+                        naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+                        utc_time = naive_time.replace(tzinfo=pytz.UTC)
+                        london_tz = pytz.timezone("Europe/London")
+                        london_time = utc_time.astimezone(london_tz)
+                        string_time = str(london_time)
+                        splittime = string_time.split(" ")
+                        lesstime = splittime[1].split(":")
+                        hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
+                        """
+
+                        now = datetime.now()
+                        hoursmins = now.strftime("%H:%M")
+
+                        api = shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
+                        station_query = "noods"
+
+                        msg = ""
+                        '''
+                        response = urlreq.urlopen(
+                            "https://radioactivity.directory/api/"
+                        )
+
+                        if response.code != 200:
+                            room.message("RAID Error: " + str(response.code))
+                        else:
+                            html = response.read().decode("ISO-8859-1")
+                            ra_stations = json.loads(
+                                re.split("<[/]{0,1}script.*?>", html)[1]
+                            )
+                            ra_station_names = list(ra_stations.keys())
+                            if station_query in ra_station_names:
+                                station_name = station_query
+                            else:
+                                station_name = [
+                                    station
+                                    for station in ra_station_names
+                                    if station_query in station
+                                ]
+                                if isinstance(station_name, list):
+                                    station_name = station_name[0]
+
+                            id_station = ra_stations[station_name]
+
+                            for stream in id_station["stream_url"]:
+                                stream_name = stream[0]
+                                if stream_name == "station":
+                                    stream_name = ""
+                                stream_url = stream[1]
+                        '''
+                        try:
+                            shazam_result = api.detect(
+                                "https://radiobollwerk.out.airtime.pro/radiobollwerk_a", rec_seconds=4
+                            )
+                            result_dict = json.loads(shazam_result.content)
+                            artists = result_dict["track"]["subtitle"]
+                            title = result_dict["track"]["title"]
+                        except Exception as e:
+                            LOGGER.error(e)
+                            artists = ""
+                            title = ""
+
+                        print("are we even getting this far?")
+                        print(artists)
+                        print(title)
+                        print((artists and title) is not None)
+                        if artists and title:
+                            LOGGER.error("artist and title exist")
+                            print("artist and title exist:" + artists + " " + title)
+
+                            googlequery = artists + " " + title
+                            res = search_google.search(googlequery)
+                            print(res)
+                            if res is not None:
+                                bc_link = res[0]["link"]
+                                print(bc_link)
+                                if ("track" or "album") in bc_link:
+                                    room.message(
+                                        "ID Radio Bollwerk: "
+                                        + hoursmins
+                                        + " - "
+                                        + artists
+                                        + " - "
+                                        + title
+                                        + " | maybe it's: "
+                                        + bc_link
+                                    )
+                                else:
+                                    room.message(
+                                        "ID Radio Bollwerk: "
+                                        + hoursmins
+                                        + " - "
+                                        + artists
+                                        + " - "
+                                        + title
+                                        + " | no bandcamp found. "
+                                    )
+                            else:
+                                room.message(
+                                    "ID Radio Bollwerk: "
+                                    + hoursmins
+                                    + " - "
+                                    + artists
+                                    + " - "
+                                    + title
+                                    + " | no bandcamp found. "
+                                )
+                        else:
+                            LOGGER.error("artist and title dont even exist")
+                            print("artist and title not found")
+                            room.message(
+                                "ID Radio Bollwerk: " + hoursmins + " | sorry, found nothing. "
+                            )
+
                     elif cmd in ["idnoods"]:
                         room.delete_message(message)
                         # code if acrcloud is used
