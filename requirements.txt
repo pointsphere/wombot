@@ -8,3 +8,5 @@ lxml
 validators
 requests
 feedparser
+git+https://github.com/ghxm/shazam_api.git#egg=shazam_api
+pydub
