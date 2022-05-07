@@ -29,7 +29,7 @@ import pytz
 import edamam
 from os import environ
 
-import shazam_api.shazam_api.shazam
+import shazam_api.shazam
 import json
 
 
@@ -497,9 +497,7 @@ class WomBot(ch.RoomManager):
                         now = datetime.now()
                         hoursmins = now.strftime("%H:%M")
 
-                        api = shazam_api.shazam_api.shazam.ShazamApi(
-                            api_key=shazam_api_key
-                        )
+                        api = shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
                         station_query = "noods"
 
                         msg = ""
