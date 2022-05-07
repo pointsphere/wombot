@@ -594,9 +594,7 @@ class WomBot(ch.RoomManager):
                             LOGGER.error("artist and title dont even exist")
                             print("artist and title not found")
                             room.message(
-                                "ID Noods: "
-                                + hoursmins
-                                + " | sorry, shazam found nothing. "
+                                "ID Noods: " + hoursmins + " | sorry, found nothing. "
                             )
 
                     elif cmd in ["idpalanga"]:
@@ -709,9 +707,7 @@ class WomBot(ch.RoomManager):
                                 )
                         else:
                             room.message(
-                                "ID Palanga: "
-                                + hoursmins
-                                + " | sorry, shazam found nothing. "
+                                "ID Palanga: " + hoursmins + " | sorry, found nothing. "
                             )
 
                     elif cmd.startswith("id") or cmd.startswith("raid"):
@@ -784,7 +780,7 @@ class WomBot(ch.RoomManager):
                                         + station_name
                                         + " "
                                         + stream_name
-                                        + ": sorry, shazam found nothing. "
+                                        + ": sorry, found nothing. "
                                     )
                                     LOGGER.error(e)
                                     room.message(msg)
