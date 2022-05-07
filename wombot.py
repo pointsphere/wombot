@@ -542,8 +542,15 @@ class WomBot(ch.RoomManager):
                                     title = result_dict["track"]["title"]
                                 except Exception as e:
                                     LOGGER.error(e)
+                                    artists = ""
+                                    title = ""
 
+                        print("are we even getting this far?")
+                        print(artists)
+                        print(title)
+                        print((artists and title) is not None)
                         if artists and title:
+                            LOGGER.error("artist and title exist")
                             print("artist and title exist:" + artists + " " + title)
 
                             googlequery = artists + " " + title
@@ -584,11 +591,12 @@ class WomBot(ch.RoomManager):
                                     + " | no bandcamp found. "
                                 )
                         else:
+                            LOGGER.error("artist and title dont even exist")
                             print("artist and title not found")
                             room.message(
                                 "ID Noods: "
                                 + hoursmins
-                                + " | sorry, no ID found through shazam. "
+                                + " | sorry, shazam found nothing. "
                             )
 
                     elif cmd in ["idpalanga"]:
@@ -612,9 +620,7 @@ class WomBot(ch.RoomManager):
                         now = datetime.now()
                         hoursmins = now.strftime("%H:%M")
 
-                        api = shazam_api.shazam_api.shazam.ShazamApi(
-                            api_key=shazam_api_key
-                        )
+                        api = shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
                         station_query = "palanga"
 
                         msg = ""
@@ -659,6 +665,8 @@ class WomBot(ch.RoomManager):
                                     title = result_dict["track"]["title"]
                                 except Exception as e:
                                     LOGGER.error(e)
+                                    artists = ""
+                                    title = ""
 
                         if artists and title:
 
@@ -703,16 +711,14 @@ class WomBot(ch.RoomManager):
                             room.message(
                                 "ID Palanga: "
                                 + hoursmins
-                                + " | sorry, no ID found through shazam. "
+                                + " | sorry, shazam found nothing. "
                             )
 
-                    elif cmd.startswith("id"):
+                    elif cmd.startswith("id") or cmd.startswith("raid"):
                         room.delete_message(message)
-                        api = shazam_api.shazam_api.shazam.ShazamApi(
-                            api_key=shazam_api_key
-                        )
-                        station_query = cmd.replace("id", "").strip()
-
+                        api = shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
+                        station_query = cmd.replace("ra", "").strip()
+                        station_query = station_query.replace("id", "").strip()
                         msg = ""
 
                         response = urlreq.urlopen(
@@ -771,17 +777,17 @@ class WomBot(ch.RoomManager):
                                         + result_dict["track"]["title"]
                                         + "\n"
                                     )
+                                    room.message(msg)
                                 except Exception as e:
                                     msg += (
                                         "ID "
                                         + station_name
                                         + " "
                                         + stream_name
-                                        + ": sorry, no ID found through shazam "
+                                        + ": sorry, shazam found nothing. "
                                     )
                                     LOGGER.error(e)
-
-                            room.message(msg)
+                                    room.message(msg)
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)
