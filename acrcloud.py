@@ -2,7 +2,6 @@ import requests
 import secrets
 
 
-
 def get_id_nts_one():
     # via broadcast monitoring, does not include some IDs for some reason
     # url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/306866/results?type=last"
@@ -29,6 +28,7 @@ def get_id_nts_one():
 
         return time, artists, title
 
+
 def get_id_nts_two():
     # via broadcast monitoring, does not include some IDs for some reason
     url = "https://api-v2.acrcloud.com/api/bm-bd-projects/2078/channels/100265/results?type=last"
@@ -54,6 +54,7 @@ def get_id_nts_two():
             artists = artists + " / " + str(item.get("name"))
 
         return time, artists, title
+
 
 def get_id_noods():
     # via broadcast monitoring, does not include some IDs for some reason

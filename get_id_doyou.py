@@ -26,14 +26,13 @@ def get():
         if hour < 23:
             print(hour)
             newhour = hour + 1
-            newhour = f'{newhour:02d}'
+            newhour = f"{newhour:02d}"
             print(newhour)
         else:
             newhour = "00"
         newtime = str(newhour) + ":" + splittime[1]
 
-
-        print(newtime,trackartist.text,tracktitle.text)
+        print(newtime, trackartist.text, tracktitle.text)
         return newtime, trackartist.text, tracktitle.text
     else:
         print("no result")

@@ -12,6 +12,7 @@ from collections import defaultdict
 import validators
 import search_google
 import logging as LOGGER
+from datetime import datetime
 
 import secrets
 import data_pics_wombat
@@ -20,8 +21,6 @@ import data_pics_otter
 import data_pics_quokka
 import data_txt_fortunes as fortunes
 
-# import data_gif_hardcoded
-# import json
 import sqliteclass
 import acrcloud
 import ntsweirdo
@@ -30,9 +29,8 @@ import pytz
 import edamam
 from os import environ
 
-import shazam_api.shazam
+import shazam_api.shazam_api.shazam
 import json
-
 
 
 db = sqliteclass.sqlite3class()
@@ -84,7 +82,7 @@ commandlist = [
     "capybara",
     "otter",
     "quokka",
-    "ntsweirdo"
+    "ntsweirdo",
 ]
 
 helpmessage = (
@@ -299,7 +297,7 @@ class WomBot(ch.RoomManager):
 
                     elif cmd in ["id1", "idch1", "idnts1", "nts1"]:
                         room.delete_message(message)
-                        #room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/1')
+                        # room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/1')
                         time, artists, title = acrcloud.get_id_nts_one()
                         print(time, artists, title)
 
@@ -349,7 +347,9 @@ class WomBot(ch.RoomManager):
                                 + title
                                 + " | no bandcamp found. "
                             )
-                        '''
+
+                        # code if ID ripped from website
+                        """
                         trackid_unstripped = get_id_nts.run("1")
                         trackid_split = trackid_unstripped.split("\n")
                         stripped = trackid_unstripped.replace("\n", " - ").replace(
@@ -371,11 +371,10 @@ class WomBot(ch.RoomManager):
                             room.message(
                                 "ID NTS1: " + stripped + " | no bandcamp found. "
                             )
-                            '''
+                            """
 
                     elif cmd in ["id2", "idch2", "idnts2", "nts2"]:
                         room.delete_message(message)
-                        #room.message('!id maintenance. please visit https://www.nts.live/live-tracklist/2')
                         time, artists, title = acrcloud.get_id_nts_two()
                         tz = pytz.timezone("UTC")
                         naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
@@ -422,9 +421,8 @@ class WomBot(ch.RoomManager):
                                 + title
                                 + " | no bandcamp found. "
                             )
-                            
 
-                        '''
+                        """
                         trackid_unstripped = get_id_nts.run("2")
                         trackid_split = trackid_unstripped.split("\n")
                         stripped = trackid_unstripped.replace("\n", " - ").replace(
@@ -446,7 +444,7 @@ class WomBot(ch.RoomManager):
                             room.message(
                                 "ID NTS2: " + stripped + " | no bandcamp found. "
                             )
-                        '''
+                        """
 
                     elif cmd in ["iddy", "iddoyou"]:
                         room.delete_message(message)
@@ -454,7 +452,7 @@ class WomBot(ch.RoomManager):
                         doyou_id_str = (
                             tracktime + " - " + trackartist + " - " + tracktitle
                         )
-                        #print('tracktime ',tracktime)
+                        # print('tracktime ',tracktime)
                         if tracktitle != None:
                             "print we have a tracktitle"
                             googlequery = trackartist + " " + tracktitle
@@ -477,13 +475,13 @@ class WomBot(ch.RoomManager):
                                         + " | no bandcamp found. "
                                     )
                         else:
-                            print('no id from doyou')
+                            print("no id from doyou")
                             room.message("ID DoYou: No ID found, sorry")
 
                     elif cmd in ["idnoods"]:
-                        #room.delete_message(message)
-                        #room.message('sorry, no noods id right now')
-                        '''
+                        # room.delete_message(message)
+                        # room.message('sorry, no noods id right now')
+                        """
                         time, artists, title = acrcloud.get_id_noods()
                         tz = pytz.timezone("UTC")
                         naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
@@ -530,18 +528,17 @@ class WomBot(ch.RoomManager):
                                 + title
                                 + " | no bandcamp found. "
                             )
-                            '''
+                        """
 
                     elif cmd in ["idpalanga"]:
-                        #room.delete_message(message)
-                        #room.message('!id maintenance. please visit https://palanga.live/')
+                        # room.delete_message(message)
+                        # room.message('!id maintenance. please visit https://palanga.live/')
 
-                        '''
-
+                        # code for recognition via acrccloud
+                        """
                         print("palanga")
                         time, artists, title = acrcloud.get_id_palanga()
                         print(time, artists, title)
-
                         tz = pytz.timezone("UTC")
                         naive_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
                         utc_time = naive_time.replace(tzinfo=pytz.UTC)
@@ -551,23 +548,87 @@ class WomBot(ch.RoomManager):
                         lesstime = string_time.split(" ")[1].split(":")
                         hoursmins = str(lesstime[0]) + ":" + str(lesstime[1])
                         print(hoursmins)
-                        googlequery = artists + " " + title
-                        res = search_google.search(googlequery)
-                        print(res)
-                        if res is not None:
-                            bc_link = res[0]["link"]
-                            print(bc_link)
-                            if ("track" or "album") in bc_link:
-                                room.message(
-                                    "ID Palanga: "
-                                    + hoursmins
-                                    + " - "
-                                    + artists
-                                    + " - "
-                                    + title
-                                    + " | maybe it's: "
-                                    + bc_link
-                                )
+                        """
+                        now = datetime.now()
+                        hoursmins = now.strftime("%H:%M")
+
+                        api = shazam_api.shazam_api.shazam.ShazamApi(
+                            api_key=shazam_api_key
+                        )
+                        station_query = "palanga"
+
+                        msg = ""
+
+                        response = urlreq.urlopen(
+                            "https://radioactivity.directory/api/"
+                        )
+
+                        if response.code != 200:
+                            room.message("RAID Error: " + str(response.code))
+                        else:
+                            html = response.read().decode("ISO-8859-1")
+                            ra_stations = json.loads(
+                                re.split("<[/]{0,1}script.*?>", html)[1]
+                            )
+                            ra_station_names = list(ra_stations.keys())
+                            if station_query in ra_station_names:
+                                station_name = station_query
+                            else:
+                                station_name = [
+                                    station
+                                    for station in ra_station_names
+                                    if station_query in station
+                                ]
+                                if isinstance(station_name, list):
+                                    station_name = station_name[0]
+
+                            id_station = ra_stations[station_name]
+
+                            for stream in id_station["stream_url"]:
+                                stream_name = stream[0]
+                                if stream_name == "station":
+                                    stream_name = ""
+                                stream_url = stream[1]
+
+                                try:
+                                    shazam_result = api.detect(
+                                        stream_url, rec_seconds=4
+                                    )
+                                    result_dict = json.loads(shazam_result.content)
+                                    artists = result_dict["track"]["subtitle"]
+                                    title = result_dict["track"]["title"]
+                                except Exception as e:
+                                    LOGGER.error(e)
+
+                        if artists and title:
+
+                            googlequery = artists + " " + title
+                            res = search_google.search(googlequery)
+                            print(res)
+                            if res is not None:
+                                bc_link = res[0]["link"]
+                                print(bc_link)
+                                if ("track" or "album") in bc_link:
+                                    room.message(
+                                        "ID Palanga: "
+                                        + hoursmins
+                                        + " - "
+                                        + artists
+                                        + " - "
+                                        + title
+                                        + " | maybe it's: "
+                                        + bc_link
+                                    )
+                                else:
+                                    room.message(
+                                        "ID Palanga: "
+                                        + hoursmins
+                                        + " - "
+                                        + artists
+                                        + " - "
+                                        + title
+                                        + " | no bandcamp found. "
+                                    )
                             else:
                                 room.message(
                                     "ID Palanga: "
@@ -580,31 +641,30 @@ class WomBot(ch.RoomManager):
                                 )
                         else:
                             room.message(
-                                "ID Palanga: "
-                                + hoursmins
-                                + " - "
-                                + artists
-                                + " - "
-                                + title
-                                + " | no bandcamp found. "
+                                "ID Palanga: " + hoursmins + " | sorry, no ID found. "
                             )
-                            '''
 
-                    elif cmd.startswith('raid'):
+                    elif cmd.startswith("id"):
 
-                        api = shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
-                        station_query = cmd.replace('raid', '').strip()
+                        api = shazam_api.shazam_api.shazam.ShazamApi(
+                            api_key=shazam_api_key
+                        )
+                        station_query = cmd.replace("id", "").strip()
 
-                        msg = ''
+                        msg = ""
 
-                        response = urlreq.urlopen('https://radioactivity.directory/api/')
+                        response = urlreq.urlopen(
+                            "https://radioactivity.directory/api/"
+                        )
 
                         if response.code != 200:
-                            room.message('RAID Error: ' + str(response.code))
+                            room.message("RAID Error: " + str(response.code))
                         else:
-                            html = response.read().decode('ISO-8859-1')
+                            html = response.read().decode("ISO-8859-1")
 
-                            ra_stations = json.loads(re.split('<[/]{0,1}script.*?>', html)[1])
+                            ra_stations = json.loads(
+                                re.split("<[/]{0,1}script.*?>", html)[1]
+                            )
 
                             ra_station_names = list(ra_stations.keys())
 
@@ -613,28 +673,52 @@ class WomBot(ch.RoomManager):
                                 station_name = station_query
                             # try to guess which station is meant
                             else:
-                                station_name = [station for station in ra_station_names if station_query in station]
+                                station_name = [
+                                    station
+                                    for station in ra_station_names
+                                    if station_query in station
+                                ]
 
                                 # if two station have the same distance, choose the first one
-                                if isinstance(station_name,list):
+                                if isinstance(station_name, list):
                                     station_name = station_name[0]
 
                             id_station = ra_stations[station_name]
 
                             # for all stations urls for the given station, run the shazam api and append results to the message
-                            for stream in id_station['stream_url']:
+                            for stream in id_station["stream_url"]:
                                 stream_name = stream[0]
-                                if stream_name == 'station':
-                                    stream_name = ''
+                                if stream_name == "station":
+                                    stream_name = ""
                                 stream_url = stream[1]
 
                                 # shazam it
                                 try:
-                                    shazam_result = api.detect(stream_url, rec_seconds=4)
+                                    shazam_result = api.detect(
+                                        stream_url, rec_seconds=4
+                                    )
                                     result_dict = json.loads(shazam_result.content)
-                                    msg += 'ID ' + station_name + " " + stream_name + ': ' + result_dict['track']['subtitle'] + ' - ' + result_dict['track']['title'] + '\n'
+                                    msg += (
+                                        "ID "
+                                        + station_name
+                                        + " "
+                                        + stream_name
+                                        + ": "
+                                        + result_dict["track"]["subtitle"]
+                                        + " - "
+                                        + result_dict["track"]["title"]
+                                        + "\n"
+                                    )
                                 except Exception as e:
-                                    msg += 'ID ' + station_name + " " + stream_name + ': Track could not be idenitfied ' + str(e) + '\n'
+                                    msg += (
+                                        "ID "
+                                        + station_name
+                                        + " "
+                                        + stream_name
+                                        + ": Track could not be idenitfied "
+                                        + str(e)
+                                        + "\n"
+                                    )
 
                             room.message(msg)
 
@@ -703,20 +787,20 @@ class WomBot(ch.RoomManager):
 
                     elif cmd in ["heart", "hearts"]:
                         room.delete_message(message)
-                        a = random.randint(1,10)
+                        a = random.randint(1, 10)
                         heart = ""
-                        for i in range(0,a):
+                        for i in range(0, a):
                             heart = heart + "*h* "
 
                         room.message(heart)
 
-                    elif cmd in ["scran","recipe","food","hungry"]:
+                    elif cmd in ["scran", "recipe", "food", "hungry"]:
                         room.delete_message(message)
                         if args:
                             q = args
                         else:
                             q = "vegetarian"
-                        title,url = edamam.scran(q)
+                        title, url = edamam.scran(q)
                         room.message("hungry? how about: " + title + " | " + url)
 
                     ##List Mods
@@ -777,9 +861,8 @@ class WomBot(ch.RoomManager):
                 # very crude way to catch posted gifs and add them to allgif_set and allgif_file
                 splitmsg = message.body.split(" ")
                 for word in splitmsg:
-                    if (
-                        (word.endswith(".gif") or word.endswith(".gifv"))
-                        and (len(word) < 75)
+                    if (word.endswith(".gif") or word.endswith(".gifv")) and (
+                        len(word) < 75
                     ):
                         print("might be gif")
                         if word in allgif_set:
