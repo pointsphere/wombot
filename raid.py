@@ -15,7 +15,7 @@ import logging as LOGGER
 
 api = shazam_api.shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
 # station_query = cmd.replace('raid', '').strip()
-station_query = "palanga"
+station_query = "noods"
 LOGGER.error(station_query)
 msg = ""
 
