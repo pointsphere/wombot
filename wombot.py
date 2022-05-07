@@ -732,8 +732,11 @@ class WomBot(ch.RoomManager):
 
                             ra_station_names = list(ra_stations.keys())
 
+                            # if idlist was requested return list of possible ids to user via private message
+                            if station_query == "list":
                             # if the provided station name is in the list of stations
-                            if station_query in ra_station_names:
+                                self.pm.message(user, "Possible ID stations: !id + " + str(ra_station_names))
+                            elif station_query in ra_station_names:
                                 station_name = station_query
                             # try to guess which station is meant
                             else:
@@ -747,43 +750,45 @@ class WomBot(ch.RoomManager):
                                 if isinstance(station_name, list):
                                     station_name = station_name[0]
 
-                            id_station = ra_stations[station_name]
+                            if station_query != "list":
 
-                            # for all stations urls for the given station, run the shazam api and append results to the message
-                            for stream in id_station["stream_url"]:
-                                stream_name = stream[0]
-                                if stream_name == "station":
-                                    stream_name = ""
-                                stream_url = stream[1]
+                                id_station = ra_stations[station_name]
 
-                                # shazam it
-                                try:
-                                    shazam_result = api.detect(
-                                        stream_url, rec_seconds=4
-                                    )
-                                    result_dict = json.loads(shazam_result.content)
-                                    msg += (
-                                        "ID "
-                                        + station_name
-                                        + " "
-                                        + stream_name
-                                        + ": "
-                                        + result_dict["track"]["subtitle"]
-                                        + " - "
-                                        + result_dict["track"]["title"]
-                                        + "\n"
-                                    )
-                                    room.message(msg)
-                                except Exception as e:
-                                    msg += (
-                                        "ID "
-                                        + station_name
-                                        + " "
-                                        + stream_name
-                                        + ": sorry, found nothing. "
-                                    )
-                                    LOGGER.error(e)
-                                    room.message(msg)
+                                # for all stations urls for the given station, run the shazam api and append results to the message
+                                for stream in id_station["stream_url"]:
+                                    stream_name = stream[0]
+                                    if stream_name == "station":
+                                        stream_name = ""
+                                    stream_url = stream[1]
+
+                                    # shazam it
+                                    try:
+                                        shazam_result = api.detect(
+                                            stream_url, rec_seconds=4
+                                        )
+                                        result_dict = json.loads(shazam_result.content)
+                                        msg += (
+                                            "ID "
+                                            + station_name
+                                            + " "
+                                            + stream_name
+                                            + ": "
+                                            + result_dict["track"]["subtitle"]
+                                            + " - "
+                                            + result_dict["track"]["title"]
+                                            + "\n"
+                                        )
+                                        room.message(msg)
+                                    except Exception as e:
+                                        msg += (
+                                            "ID "
+                                            + station_name
+                                            + " "
+                                            + stream_name
+                                            + ": sorry, found nothing. "
+                                        )
+                                        LOGGER.error(e)
+                                        room.message(msg)
 
                     elif cmd in ["bbb", "bigb", "gift"]:
                         room.delete_message(message)
