@@ -713,8 +713,8 @@ class WomBot(ch.RoomManager):
                     elif cmd.startswith("id") or cmd.startswith("raid"):
                         room.delete_message(message)
                         api = shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
-                        station_query = cmd.replace("ra", "").strip()
-                        station_query = station_query.replace("id", "").strip()
+                        station_query = cmd.replace("ra", "", count=1).strip()
+                        station_query = station_query.replace("id", "", count=1).strip()
                         msg = ""
 
                         response = urlreq.urlopen(
