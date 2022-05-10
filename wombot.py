@@ -767,7 +767,7 @@ class WomBot(ch.RoomManager):
                                             stream_url, rec_seconds=4
                                         )
                                         result_dict = json.loads(shazam_result.content)
-                                        msg += (
+                                        msg = (
                                             "ID "
                                             + station_name
                                             + " "
@@ -780,7 +780,7 @@ class WomBot(ch.RoomManager):
                                         )
                                         room.message(msg)
                                     except Exception as e:
-                                        msg += (
+                                        msg = (
                                             "ID "
                                             + station_name
                                             + " "
