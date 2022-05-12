@@ -830,7 +830,6 @@ class WomBot(ch.RoomManager):
                             )
 
                     elif cmd.startswith("id") or cmd.startswith("raid"):
-                        room.delete_message(message)
                         api = shazam_api.shazam.ShazamApi(api_key=shazam_api_key)
                         station_query = cmd.replace("ra", "").strip()
                         station_query = station_query.replace("id", "").strip()
@@ -851,20 +850,22 @@ class WomBot(ch.RoomManager):
 
                             ra_station_names = list(ra_stations.keys())
 
+                            station_name = None
                             # if the provided station name is in the list of stations
                             if station_query in ra_station_names:
                                 station_name = station_query
                             # try to guess which station is meant
                             else:
-                                station_name = [
-                                    station
-                                    for station in ra_station_names
-                                    if station_query in station
-                                ]
-
-                                # if two station have the same distance, choose the first one
-                                if isinstance(station_name, list):
-                                    station_name = station_name[0]
+                                for station in ra_station_names:
+                                    if station_query in station or \
+                                       station in station_query:
+                                           station_name = station
+                                           break
+                            if station_name is None:
+                                # ignore cmd
+                                return
+                            # Now that we know we can handle the station id...
+                            room.delete_message(message)
 
                             id_station = ra_stations[station_name]
 
